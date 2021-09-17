@@ -1,6 +1,6 @@
-package eu.kamilsikora.financial.api.list.todo.repository;
+package eu.kamilsikora.financial.api.repository.list;
 
-import eu.kamilsikora.financial.api.list.todo.entity.TodoListElement;
+import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TodoListElementRepository extends JpaRepository<TodoListElement, Long> {

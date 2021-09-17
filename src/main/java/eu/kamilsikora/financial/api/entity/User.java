@@ -1,5 +1,6 @@
-package eu.kamilsikora.financial.api.list.todo.entity;
+package eu.kamilsikora.financial.api.entity;
 
+import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import lombok.Getter;
 import lombok.Setter;
 

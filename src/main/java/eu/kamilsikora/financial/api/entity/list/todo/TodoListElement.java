@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.list.todo.entity;
+package eu.kamilsikora.financial.api.entity.list.todo;
 
 import lombok.Builder;
 import lombok.Getter;
