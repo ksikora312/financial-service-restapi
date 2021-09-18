@@ -28,9 +28,12 @@ public class User {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     private Long userId;
+    private String username;
     private String email;
     private String password;
     private LocalDateTime creationDate;
+    private Boolean enabled;
+
 
     @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
