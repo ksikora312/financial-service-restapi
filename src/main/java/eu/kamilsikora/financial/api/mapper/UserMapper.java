@@ -17,7 +17,7 @@ public abstract class UserMapper {
     @AfterMapping
     protected void fillRestOfData(@MappingTarget User user) {
         user.setCreationDate(LocalDateTime.now());
-        user.setEnabled(false);
+        user.setEnabled(true);
     }
 
     @Autowired
