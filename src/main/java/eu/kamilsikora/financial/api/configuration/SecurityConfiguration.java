@@ -71,6 +71,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         jsonAuthenticationFilter.setAuthenticationManager(super.authenticationManager());
         jsonAuthenticationFilter.setAuthenticationSuccessHandler(successHandler);
         jsonAuthenticationFilter.setAuthenticationFailureHandler(failureHandler);
+        jsonAuthenticationFilter.setFilterProcessesUrl("/login");
         return jsonAuthenticationFilter;
     }
 
