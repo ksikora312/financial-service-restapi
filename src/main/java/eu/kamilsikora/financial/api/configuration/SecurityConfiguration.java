@@ -22,6 +22,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private static final String[] WHITELIST_OPENAPI = {
+            "/v2/api-docs",
+            "/swagger-resources/**",
+            "/swagger-ui.html**",
+            "/webjars/**",
+            "favicon.ico"
+    };
+
     private final AuthenticationFailureHandler failureHandler;
     private final AuthenticationSuccessHandler successHandler;
     private final UserDetailsService userDetailsService;
@@ -47,10 +55,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-                    .and()
+                .antMatchers(WHITELIST_OPENAPI).permitAll()
+                .anyRequest().permitAll()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                    .and()
+                .and()
                 .addFilter(jsonAuthenticationFilter())
                 .addFilter(jwtAuthorizationFilter());
     }
