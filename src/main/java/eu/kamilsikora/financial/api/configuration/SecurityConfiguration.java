@@ -27,7 +27,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**",
             "/swagger-ui.html**",
             "/webjars/**",
-            "favicon.ico"
+            "favicon.ico",
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
     };
 
     private final AuthenticationFailureHandler failureHandler;
@@ -56,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register").permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers(WHITELIST_OPENAPI).permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()

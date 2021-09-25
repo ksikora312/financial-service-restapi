@@ -34,7 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         final UsernamePasswordAuthenticationToken auth = getAuth(request);
-        if(auth == null) {
+        if (auth == null) {
             chain.doFilter(request, response);
             return;
         }
@@ -49,9 +49,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     .build()
                     .verify(token.replace(TOKEN_PREFIX, ""))
                     .getSubject();
-            if(username != null) {
+            if (username != null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+                return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             }
         }
         return null;

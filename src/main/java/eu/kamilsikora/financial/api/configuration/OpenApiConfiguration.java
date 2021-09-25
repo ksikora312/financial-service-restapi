@@ -3,6 +3,7 @@ package eu.kamilsikora.financial.api.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -28,6 +29,7 @@ public class OpenApiConfiguration {
     public Docket swaggerApi() {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
+                .ignoredParameterTypes(UserDetails.class)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
@@ -49,7 +51,7 @@ public class OpenApiConfiguration {
     }
 
     private ApiKey apiKey() {
-        return new ApiKey("JWT", HttpHeaders.AUTHORIZATION.toString(), "header");
+        return new ApiKey(HttpHeaders.AUTHORIZATION.toString(), HttpHeaders.AUTHORIZATION.toString(), "header");
     }
 
     private SecurityContext securityContext() {
@@ -60,6 +62,6 @@ public class OpenApiConfiguration {
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
-        return Arrays.asList(new SecurityReference("JWT", authorizationScopes));
+        return Arrays.asList(new SecurityReference(HttpHeaders.AUTHORIZATION.toString(), authorizationScopes));
     }
 }

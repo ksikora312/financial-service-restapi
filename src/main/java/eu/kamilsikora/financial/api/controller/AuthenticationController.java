@@ -5,6 +5,8 @@ import eu.kamilsikora.financial.api.controller.dto.RegistrationDto;
 import eu.kamilsikora.financial.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +30,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/test")
-    public String test() {
-        return "test content";
+    public String test(@AuthenticationPrincipal UserDetails principal) {
+        return "hello " + principal.getUsername();
     }
 }
