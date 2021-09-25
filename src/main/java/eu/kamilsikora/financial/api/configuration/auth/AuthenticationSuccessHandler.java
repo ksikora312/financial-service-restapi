@@ -3,7 +3,6 @@ package eu.kamilsikora.financial.api.configuration.auth;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,8 +44,14 @@ public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccess
 
     @Getter
     @Setter
-    @AllArgsConstructor
     private static class TokenResponse {
+
+        private static final String tokenPrefix = "Bearer ";
+
+        public TokenResponse(final String token) {
+            this.token = tokenPrefix + token;
+        }
+
         private String token;
     }
 }
