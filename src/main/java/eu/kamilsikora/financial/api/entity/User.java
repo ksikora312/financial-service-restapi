@@ -12,6 +12,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -30,8 +34,12 @@ public class User {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
     private Long userId;
+    @NotBlank
     private String username;
+    @NotNull
+    @Email(message = "Email address must be of correct format!")
     private String email;
+    @NotBlank
     private String password;
     private LocalDateTime creationDate;
     private Boolean enabled;

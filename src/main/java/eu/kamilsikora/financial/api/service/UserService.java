@@ -18,7 +18,7 @@ public class UserService {
 
     public void registerUser(RegistrationDto registrationDto) {
         User user = userMapper.convertToEntity(registrationDto);
-        validator.validate(user);
+        validator.validate(user, registrationDto);
         //TODO: add some constraints checks
         userRepository.save(user);
     }
