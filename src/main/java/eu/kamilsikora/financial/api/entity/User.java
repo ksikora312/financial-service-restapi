@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.entity;
 
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
+import eu.kamilsikora.financial.api.entity.validation.UniqueUsernameAndEmail;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "users")
+@UniqueUsernameAndEmail
 public class User {
 
     @Id
