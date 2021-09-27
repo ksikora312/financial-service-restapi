@@ -42,10 +42,14 @@ public class User {
     @NotBlank
     private String password;
     private LocalDateTime creationDate;
+    private LocalDateTime activationDate;
     private Boolean enabled;
-
-
     @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
+
+    public void activateAccount() {
+        this.enabled = true;
+        this.activationDate = LocalDateTime.now();
+    }
 
 }

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.SequenceGenerator;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalUnit;
 import java.util.UUID;
 
 @Entity
@@ -27,9 +29,16 @@ public class Token {
     private String token;
     @JoinColumn(name = "user_id")
     private User user;
+    private LocalDateTime expiryDate;
 
-    public Token(final User user) {
+    public Token(final User user, final TemporalUnit expirationUnit, final long expirationValue) {
         this.user = user;
         this.token = UUID.randomUUID().toString();
+        expiryDate = LocalDateTime.now().plus(expirationValue, expirationUnit);
     }
+
+    public boolean hasExpired() {
+        return expiryDate.isAfter(LocalDateTime.now());
+    }
+
 }
