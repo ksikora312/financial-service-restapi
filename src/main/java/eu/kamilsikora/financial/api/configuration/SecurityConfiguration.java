@@ -57,6 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/activate/**").permitAll()
                 .antMatchers(WHITELIST_OPENAPI).permitAll()
                 .anyRequest().authenticated()
                 .and()

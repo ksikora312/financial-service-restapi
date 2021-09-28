@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Token {
 
     @Id
@@ -40,7 +42,7 @@ public class Token {
     }
 
     public boolean hasExpired() {
-        return expiryDate.isAfter(LocalDateTime.now());
+        return expiryDate.isBefore(LocalDateTime.now());
     }
 
 }
