@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalUnit;
@@ -27,6 +28,7 @@ public class Token {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "token_seq")
     private Long tokenId;
     private String token;
+    @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
     private LocalDateTime expiryDate;
