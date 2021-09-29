@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.controller.dto;
+package eu.kamilsikora.financial.api.controller.dto.auth;
 
 import lombok.Getter;
 import lombok.Setter;
