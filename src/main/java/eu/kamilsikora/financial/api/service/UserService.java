@@ -24,7 +24,6 @@ public class UserService {
     public void registerUser(final RegistrationDto registrationDto) {
         final User user = userMapper.convertToEntity(registrationDto);
         validator.validate(user, registrationDto);
-        //TODO: add some constraints checks
         userRepository.save(user);
         final Token activationToken = tokenService.createActivationToken(user);
         emailService.sendAccountActivationEmail(activationToken);
