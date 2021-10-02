@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class UserHelperService {
     private final UserRepository userRepository;
 
-    public User getActiveUser(final String username) {
-        return userRepository.findByUsernameAndEnabled(username, true).orElseThrow(()
+    public User getActiveUser(final UserDetails userDetails) {
+        return userRepository.findByUsernameAndEnabled(userDetails.getUsername(), true).orElseThrow(()
                 -> new ObjectDoesNotExistException("User does not exist!"));
     }
 }
