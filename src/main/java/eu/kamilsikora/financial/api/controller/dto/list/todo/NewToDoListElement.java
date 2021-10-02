@@ -14,5 +14,5 @@ public class NewToDoListElement {
     private String description;
     @DateTimeFormat(pattern = ApplicationConstants.DATE_FORMAT)
     private LocalDateTime dueDate;
-    private Priority priority;
+    private String priority;
 }
