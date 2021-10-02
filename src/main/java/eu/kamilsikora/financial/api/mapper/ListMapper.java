@@ -24,6 +24,13 @@ public abstract class ListMapper {
         todoListElement.setDone(false);
     }
 
+    @AfterMapping
+    protected void fillRestOfData(@MappingTarget TodoList todoList) {
+        if(todoList.getIsPrimary() == null) {
+            todoList.setIsPrimary(false);
+        }
+    }
+
     @Mapping(target = "priority", expression = "java(Priority.of(newTodoListElement.getPriority()))")
     @Mapping(source = "newTodoListElement.name", target = "name")
     @Mapping(source = "todoList", target = "list")
