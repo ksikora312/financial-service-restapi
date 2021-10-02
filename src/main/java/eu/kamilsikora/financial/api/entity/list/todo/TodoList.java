@@ -26,6 +26,7 @@ public class TodoList {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_list_seq")
     private Long listId;
+    private String name;
     @OneToMany(mappedBy = "list")
     private List<TodoListElement> elements;
     private Boolean isPrimary;
