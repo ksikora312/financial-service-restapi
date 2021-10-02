@@ -14,7 +14,9 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", imports = Priority.class)
 public interface ListMapper {
     @Mapping(target = "priority", expression = "java(Priority.of(newTodoListElement.getPriority()))")
-    TodoListElement mapToEntity(NewToDoListElement newTodoListElement);
+    @Mapping(source = "newTodoListElement.name", target = "name")
+    @Mapping(source = "todoList", target = "list")
+    TodoListElement mapToEntity(NewToDoListElement newTodoListElement, TodoList todoList);
 
     @Mapping(source = "user", target = "user")
     TodoList mapToEntity(NewTodoList newTodoList, User user);
