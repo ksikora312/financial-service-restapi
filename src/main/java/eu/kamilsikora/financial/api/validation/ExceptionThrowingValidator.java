@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.util;
+package eu.kamilsikora.financial.api.validation;
 
 import eu.kamilsikora.financial.api.errorhandling.ConstraintViolationException;
 

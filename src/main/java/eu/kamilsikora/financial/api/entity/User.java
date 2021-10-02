@@ -1,7 +1,7 @@
 package eu.kamilsikora.financial.api.entity;
 
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
-import eu.kamilsikora.financial.api.entity.validation.UniqueUsernameAndEmail;
+import eu.kamilsikora.financial.api.validation.UniqueUsernameAndEmail;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 

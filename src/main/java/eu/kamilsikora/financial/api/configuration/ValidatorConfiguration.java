@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.configuration;
 
-import eu.kamilsikora.financial.api.util.ExceptionThrowingValidator;
+import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

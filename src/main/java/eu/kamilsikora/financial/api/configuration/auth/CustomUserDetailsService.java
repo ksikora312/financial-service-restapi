@@ -1,6 +1,5 @@
-package eu.kamilsikora.financial.api.service;
+package eu.kamilsikora.financial.api.configuration.auth;
 
-import eu.kamilsikora.financial.api.configuration.UserPrincipal;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

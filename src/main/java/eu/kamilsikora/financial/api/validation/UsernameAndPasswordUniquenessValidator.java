@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.entity.validation;
+package eu.kamilsikora.financial.api.validation;
 
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.repository.UserRepository;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

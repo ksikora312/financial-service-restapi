@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.service;
+package eu.kamilsikora.financial.api.service.email;
 
 import eu.kamilsikora.financial.api.entity.Token;
 

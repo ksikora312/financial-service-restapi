@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.configuration;
+package eu.kamilsikora.financial.api.configuration.auth;
 
 import eu.kamilsikora.financial.api.entity.User;
 import org.springframework.security.core.GrantedAuthority;

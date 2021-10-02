@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.entity.validation;
+package eu.kamilsikora.financial.api.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

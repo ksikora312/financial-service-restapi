@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.repository.list;
+package eu.kamilsikora.financial.api.repository.list.todo;
 
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
 import org.springframework.data.jpa.repository.JpaRepository;
