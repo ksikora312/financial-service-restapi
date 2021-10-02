@@ -51,4 +51,8 @@ public class User {
         this.activationDate = LocalDateTime.now();
     }
 
+    public void addNewList(final TodoList todoList) {
+        todoLists.add(todoList);
+    }
+
 }

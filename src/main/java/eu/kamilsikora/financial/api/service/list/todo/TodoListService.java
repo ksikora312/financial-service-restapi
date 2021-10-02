@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.service.list.todo;
 
 import eu.kamilsikora.financial.api.controller.dto.list.todo.NewToDoListElement;
+import eu.kamilsikora.financial.api.controller.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.controller.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
@@ -21,13 +22,22 @@ public class TodoListService {
     private final ListMapper listMapper;
     private final UserHelperService userHelperService;
 
-    public ResponseTodoList addNewElement(Long userId, NewToDoListElement newToDoListElement) {
-        User user = userHelperService.getActiveUser(userId);
-        TodoList todoList = user.getTodoLists().stream().filter(list -> list.getListId().equals(newToDoListElement.getListId()))
+    public ResponseTodoList addNewElement(final Long userId, final NewToDoListElement newToDoListElement) {
+        final User user = userHelperService.getActiveUser(userId);
+        final TodoList todoList = user.getTodoLists().stream().filter(list -> list.getListId().equals(newToDoListElement.getListId()))
                 .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
-        TodoListElement todoListElement = listMapper.mapToEntity(newToDoListElement, todoList);
+        final TodoListElement todoListElement = listMapper.mapToEntity(newToDoListElement, todoList);
         todoList.addElement(todoListElement);
         todoListElementRepository.save(todoListElement);
         return listMapper.mapToDto(todoList);
     }
+
+    public ResponseTodoList createNewList(final Long userId, final NewTodoList newTodoList) {
+        final User user = userHelperService.getActiveUser(userId);
+        final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
+        user.addNewList(todoList);
+        todoListRepository.save(todoList);
+        return listMapper.mapToDto(todoList);
+    }
+
 }
