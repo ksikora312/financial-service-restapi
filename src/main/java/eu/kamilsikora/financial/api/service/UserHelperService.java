@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 public class UserHelperService {
     private final UserRepository userRepository;
 
-    public User getActiveUser(Long userId) {
-        return userRepository.findByIdAndEnabled(userId, true).orElseThrow(()
+    public User getActiveUser(final String username) {
+        return userRepository.findByUsernameAndEnabled(username, true).orElseThrow(()
                 -> new ObjectDoesNotExistException("User does not exist!"));
     }
 }

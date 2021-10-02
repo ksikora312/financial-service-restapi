@@ -22,8 +22,8 @@ public class TodoListService {
     private final ListMapper listMapper;
     private final UserHelperService userHelperService;
 
-    public ResponseTodoList addNewElement(final Long userId, final NewToDoListElement newToDoListElement) {
-        final User user = userHelperService.getActiveUser(userId);
+    public ResponseTodoList addNewElement(final String username, final NewToDoListElement newToDoListElement) {
+        final User user = userHelperService.getActiveUser(username);
         final TodoList todoList = user.getTodoLists().stream().filter(list -> list.getListId().equals(newToDoListElement.getListId()))
                 .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
         final TodoListElement todoListElement = listMapper.mapToEntity(newToDoListElement, todoList);
@@ -32,8 +32,8 @@ public class TodoListService {
         return listMapper.mapToDto(todoList);
     }
 
-    public ResponseTodoList createNewList(final Long userId, final NewTodoList newTodoList) {
-        final User user = userHelperService.getActiveUser(userId);
+    public ResponseTodoList createNewList(final String username, final NewTodoList newTodoList) {
+        final User user = userHelperService.getActiveUser(username);
         final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
         user.addNewList(todoList);
         todoListRepository.save(todoList);
