@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.controller.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.controller.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.controller.dto.list.todo.ResponseTodoList;
+import eu.kamilsikora.financial.api.controller.dto.list.todo.ResponseTodoListCollection;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
@@ -14,6 +15,9 @@ import eu.kamilsikora.financial.api.repository.list.todo.TodoListRepository;
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +52,23 @@ public class TodoListService {
         user.getTodoLists().stream()
                 .filter(TodoList::getIsPrimary)
                 .forEach(list -> list.setIsPrimary(false));
+    }
+
+    public ResponseTodoList getPrimaryList(final UserPrincipal userPrincipal) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList primaryList = user.getTodoLists().stream()
+                .filter(TodoList::getIsPrimary)
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        return listMapper.mapToDto(primaryList);
+    }
+
+    public ResponseTodoListCollection getTodoLists(final UserPrincipal userPrincipal) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final List<TodoList> userLists = user.getTodoLists();
+        final List<ResponseTodoList> responseLists = userLists.stream()
+                .map(listMapper::mapToDto)
+                .collect(Collectors.toList());
+        return new ResponseTodoListCollection(responseLists);
     }
 
 }
