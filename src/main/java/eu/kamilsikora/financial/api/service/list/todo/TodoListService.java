@@ -15,6 +15,7 @@ import eu.kamilsikora.financial.api.repository.list.todo.TodoListRepository;
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +28,7 @@ public class TodoListService {
     private final ListMapper listMapper;
     private final UserHelperService userHelperService;
 
+    @Transactional
     public ResponseTodoList addNewElement(final UserPrincipal userPrincipal, final NewToDoListElement newToDoListElement) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList todoList = user.getTodoLists().stream().filter(list -> list.getListId().equals(newToDoListElement.getListId()))
@@ -37,11 +39,19 @@ public class TodoListService {
         return listMapper.mapToDto(todoList);
     }
 
+    @Transactional
     public ResponseTodoList createNewList(final UserPrincipal userPrincipal, final NewTodoList newTodoList) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
         user.addNewList(todoList);
         todoListRepository.save(todoList);
+        return listMapper.mapToDto(todoList);
+    }
+
+    @Transactional
+    public ResponseTodoList markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList todoList = user.markListAsPrimary(listId);
         return listMapper.mapToDto(todoList);
     }
 

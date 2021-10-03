@@ -34,4 +34,9 @@ public class TodoListControllerImpl implements TodoListController {
     public ResponseTodoListCollection getAllLists(final UserPrincipal userPrincipal) {
         return todoListService.getTodoLists(userPrincipal);
     }
+
+    @Override
+    public ResponseTodoList markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
+        return todoListService.markAsPrimary(userPrincipal, listId);
+    }
 }

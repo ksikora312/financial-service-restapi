@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.entity;
 
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
+import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.validation.UniqueUsernameAndEmail;
 import lombok.Getter;
 import lombok.Setter;
@@ -61,6 +62,16 @@ public class User {
             todoLists.stream().filter(TodoList::getIsPrimary).findFirst().ifPresent(list -> list.setIsPrimary(false));
         }
         todoLists.add(todoList);
+    }
+
+    public TodoList markListAsPrimary(final Long listId) {
+        TodoList todoList = todoLists.stream().filter(list -> list.getListId().equals(listId)).findFirst().orElseThrow(()
+                -> new ObjectDoesNotExistException("List does not exist!"));
+        todoLists.stream()
+                .filter(list -> list.getIsPrimary().equals(true))
+                .forEach(list -> list.setIsPrimary(false));
+        todoList.setIsPrimary(true);
+        return todoList;
     }
 
 }
