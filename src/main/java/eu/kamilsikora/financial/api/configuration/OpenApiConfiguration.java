@@ -1,9 +1,9 @@
 package eu.kamilsikora.financial.api.configuration;
 
+import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -29,7 +29,7 @@ public class OpenApiConfiguration {
     public Docket swaggerApi() {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
-                .ignoredParameterTypes(UserDetails.class)
+                .ignoredParameterTypes(UserPrincipal.class)
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
