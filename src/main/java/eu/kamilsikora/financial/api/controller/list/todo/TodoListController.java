@@ -29,6 +29,10 @@ public interface TodoListController {
     @ResponseStatus(HttpStatus.OK)
     ResponseTodoList getPrimaryList(@AuthenticationPrincipal UserPrincipal userPrincipal);
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseTodoList getListAtId(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
+
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     ResponseTodoListCollection getAllLists(@AuthenticationPrincipal UserPrincipal userPrincipal);

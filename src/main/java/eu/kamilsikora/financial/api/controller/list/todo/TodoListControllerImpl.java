@@ -31,6 +31,11 @@ public class TodoListControllerImpl implements TodoListController {
     }
 
     @Override
+    public ResponseTodoList getListAtId(UserPrincipal userPrincipal, Long listId) {
+        return todoListService.getListAtId(userPrincipal, listId);
+    }
+
+    @Override
     public ResponseTodoListCollection getAllLists(final UserPrincipal userPrincipal) {
         return todoListService.getTodoLists(userPrincipal);
     }

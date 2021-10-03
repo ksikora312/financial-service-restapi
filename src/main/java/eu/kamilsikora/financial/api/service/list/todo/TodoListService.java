@@ -63,6 +63,14 @@ public class TodoListService {
         return listMapper.mapToDto(primaryList);
     }
 
+    public ResponseTodoList getListAtId(final UserPrincipal userPrincipal, final Long listId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList list = user.getTodoLists().stream()
+                .filter(l -> l.getListId().equals(listId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        return listMapper.mapToDto(list);
+    }
+
     public ResponseTodoListCollection getTodoLists(final UserPrincipal userPrincipal) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final List<TodoList> userLists = user.getTodoLists();
