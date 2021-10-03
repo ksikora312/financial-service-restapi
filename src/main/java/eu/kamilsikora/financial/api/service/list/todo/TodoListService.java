@@ -40,18 +40,9 @@ public class TodoListService {
     public ResponseTodoList createNewList(final UserPrincipal userPrincipal, final NewTodoList newTodoList) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
-        if(todoList.getIsPrimary()) {
-            markCurrentPrimaryListAsNotPrimary(user);
-        }
         user.addNewList(todoList);
         todoListRepository.save(todoList);
         return listMapper.mapToDto(todoList);
-    }
-
-    private void markCurrentPrimaryListAsNotPrimary(final User user) {
-        user.getTodoLists().stream()
-                .filter(TodoList::getIsPrimary)
-                .forEach(list -> list.setIsPrimary(false));
     }
 
     public ResponseTodoList getPrimaryList(final UserPrincipal userPrincipal) {

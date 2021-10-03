@@ -17,6 +17,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -52,6 +53,13 @@ public class User {
     }
 
     public void addNewList(final TodoList todoList) {
+        Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
+        if(primaryList.isEmpty()) {
+            todoList.setIsPrimary(true);
+        }
+        else if(todoList.getIsPrimary()) {
+            todoLists.stream().filter(TodoList::getIsPrimary).findFirst().ifPresent(list -> list.setIsPrimary(false));
+        }
         todoLists.add(todoList);
     }
 
