@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.controller;
 
 import eu.kamilsikora.financial.api.errorhandling.ConstraintViolationException;
+import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,13 @@ public class ControllerAdvice {
                                                           final WebRequest webRequest) {
         Set<String> errorMessages = exception.getErrorMessages();
         return new ErrorMessage(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), errorMessages);
+    }
+
+    @ExceptionHandler(ObjectDoesNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handleObjectNotFoundException(final ObjectDoesNotExistException exception,
+                                                      final WebRequest webRequest) {
+        return new ErrorMessage(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), Set.of(exception.getMessage()));
     }
 
 
