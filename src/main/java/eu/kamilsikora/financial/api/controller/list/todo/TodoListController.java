@@ -10,6 +10,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,6 +25,10 @@ public interface TodoListController {
     @PostMapping("element")
     @ResponseStatus(HttpStatus.CREATED)
     ResponseTodoList addNewElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody NewToDoListElement newToDoListElement);
+
+    @PutMapping("/element/{id}/{state}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    ResponseTodoList markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean finished);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

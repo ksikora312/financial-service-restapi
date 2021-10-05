@@ -74,4 +74,18 @@ public class User {
         return todoList;
     }
 
+    public TodoList markElementAs(final Long elementId, final Boolean finished) {
+        final TodoList todoList = todoLists.stream()
+                .filter(list -> doesListContainElement(list, elementId))
+                .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        todoList.getElements().stream().filter(element -> element.getElementId().equals(elementId))
+                .forEach(element -> element.setDone(finished));
+        return todoList;
+    }
+
+    private boolean doesListContainElement(final TodoList todoList, final Long elementId) {
+        return todoList.getElements().stream()
+                .anyMatch(element -> element.getElementId().equals(elementId));
+    }
+
 }

@@ -40,6 +40,13 @@ public class TodoListService {
     }
 
     @Transactional
+    public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean finished) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList todoList = user.markElementAs(elementId, finished);
+        return listMapper.mapToDto(todoList);
+    }
+
+    @Transactional
     public ResponseTodoList createNewList(final UserPrincipal userPrincipal, final NewTodoList newTodoList) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
