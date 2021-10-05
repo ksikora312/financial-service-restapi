@@ -1,5 +1,6 @@
 package eu.kamilsikora.financial.api.entity;
 
+import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
@@ -12,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -48,8 +50,8 @@ public class User {
     private Boolean enabled;
     @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
-    @OneToMany(mappedBy = "user")
-    private List<SingleOutcome> outcomes;
+    @OneToOne(mappedBy = "user")
+    private Expenses expenses;
 
     public void addNewList(final TodoList todoList) {
         Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();

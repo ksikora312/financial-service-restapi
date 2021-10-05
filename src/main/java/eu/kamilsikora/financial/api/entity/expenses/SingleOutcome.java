@@ -38,7 +38,6 @@ public abstract class SingleOutcome {
     protected LocalDateTime date;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    protected User user;
-
+    @JoinColumn(name = "expenses_id")
+    private Expenses expenses;
 }
