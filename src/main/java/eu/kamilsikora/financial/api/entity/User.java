@@ -48,11 +48,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
 
-    public void activateAccount() {
-        this.enabled = true;
-        this.activationDate = LocalDateTime.now();
-    }
-
     public void addNewList(final TodoList todoList) {
         Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
         if(primaryList.isEmpty()) {

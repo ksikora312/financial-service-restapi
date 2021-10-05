@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
@@ -32,8 +33,13 @@ public class TokenService {
         if(user.getEnabled()) {
             throw new ActivationTokenException("User account is already activated!");
         }
-        user.activateAccount();
+        activateUserAccount(user);
         tokenRepository.delete(token);
+    }
+
+    private void activateUserAccount(final User user) {
+        user.setEnabled(true);
+        user.setActivationDate(LocalDateTime.now());
     }
 
     @Transactional
