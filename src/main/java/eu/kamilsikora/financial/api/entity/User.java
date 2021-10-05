@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.entity;
 
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
+import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.validation.UniqueUsernameAndEmail;
 import lombok.Getter;
@@ -47,6 +48,8 @@ public class User {
     private Boolean enabled;
     @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
+    @OneToMany(mappedBy = "user")
+    private List<SingleOutcome> outcomes;
 
     public void addNewList(final TodoList todoList) {
         Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
