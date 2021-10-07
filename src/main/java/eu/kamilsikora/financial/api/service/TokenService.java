@@ -2,7 +2,9 @@ package eu.kamilsikora.financial.api.service;
 
 import eu.kamilsikora.financial.api.entity.Token;
 import eu.kamilsikora.financial.api.entity.User;
+import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.errorhandling.ActivationTokenException;
+import eu.kamilsikora.financial.api.repository.ExpensesRepository;
 import eu.kamilsikora.financial.api.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +21,8 @@ public class TokenService {
     private static final TemporalUnit TOKEN_ALIVE_UNIT = ChronoUnit.DAYS;
     private static final long TOKEN_ALIVE_VALUE = 7L;
 
-
     private final TokenRepository tokenRepository;
+    private final ExpensesRepository expensesRepository;
 
     @Transactional
     public void activateAccountByToken(final String tokenValue) {
@@ -34,13 +36,19 @@ public class TokenService {
             throw new ActivationTokenException("User account is already activated!");
         }
         activateUserAccount(user);
+        createExpensesForUser(user);
         tokenRepository.delete(token);
     }
 
     private void activateUserAccount(final User user) {
         user.setEnabled(true);
         user.setActivationDate(LocalDateTime.now());
-        // TODO create and persist new Expenses object assigned to freshly activated user
+    }
+
+    private void createExpensesForUser(final User user) {
+        Expenses expenses = new Expenses();
+        expenses.setUser(user);
+        expensesRepository.save(expenses);
     }
 
     @Transactional
