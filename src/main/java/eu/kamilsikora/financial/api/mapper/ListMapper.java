@@ -1,9 +1,9 @@
 package eu.kamilsikora.financial.api.mapper;
 
-import eu.kamilsikora.financial.api.controller.dto.list.todo.NewToDoListElement;
-import eu.kamilsikora.financial.api.controller.dto.list.todo.NewTodoList;
-import eu.kamilsikora.financial.api.controller.dto.list.todo.ResponseTodoList;
-import eu.kamilsikora.financial.api.controller.dto.list.todo.ResponseTodoListElement;
+import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
+import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;

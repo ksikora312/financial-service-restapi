@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.service;
 
-import eu.kamilsikora.financial.api.controller.dto.auth.RegistrationDto;
+import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import eu.kamilsikora.financial.api.entity.Token;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.mapper.UserMapper;

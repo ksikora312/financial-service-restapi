@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.controller.dto;
+package eu.kamilsikora.financial.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

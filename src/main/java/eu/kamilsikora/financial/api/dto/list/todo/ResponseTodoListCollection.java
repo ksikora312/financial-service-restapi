@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.controller.dto.list.todo;
+package eu.kamilsikora.financial.api.dto.list.todo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

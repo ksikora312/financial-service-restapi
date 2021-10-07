@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.mapper;
 
-import eu.kamilsikora.financial.api.controller.dto.auth.RegistrationDto;
+import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import eu.kamilsikora.financial.api.entity.User;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;

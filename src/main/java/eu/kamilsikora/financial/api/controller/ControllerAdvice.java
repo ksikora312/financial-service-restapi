@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.controller;
 
-import eu.kamilsikora.financial.api.controller.dto.ErrorDto;
+import eu.kamilsikora.financial.api.dto.ErrorDto;
 import eu.kamilsikora.financial.api.errorhandling.ConstraintViolationException;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import org.springframework.http.HttpStatus;

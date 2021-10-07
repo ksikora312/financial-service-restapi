@@ -1,7 +1,7 @@
 package eu.kamilsikora.financial.api.controller.auth;
 
 import eu.kamilsikora.financial.api.configuration.auth.LoginCredentials;
-import eu.kamilsikora.financial.api.controller.dto.auth.RegistrationDto;
+import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

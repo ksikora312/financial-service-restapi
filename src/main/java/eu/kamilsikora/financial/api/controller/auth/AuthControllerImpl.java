@@ -1,7 +1,7 @@
 package eu.kamilsikora.financial.api.controller.auth;
 
 import eu.kamilsikora.financial.api.configuration.auth.LoginCredentials;
-import eu.kamilsikora.financial.api.controller.dto.auth.RegistrationDto;
+import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import eu.kamilsikora.financial.api.service.TokenService;
 import eu.kamilsikora.financial.api.service.UserService;
 import lombok.RequiredArgsConstructor;
