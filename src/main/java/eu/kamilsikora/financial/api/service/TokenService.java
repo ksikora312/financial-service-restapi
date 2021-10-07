@@ -26,11 +26,11 @@ public class TokenService {
     public void activateAccountByToken(final String tokenValue) {
         final Token token = tokenRepository.findByToken(tokenValue)
                 .orElseThrow(() -> new ActivationTokenException("Token is not connected with user!"));
-        if(token.hasExpired()) {
+        if (token.hasExpired()) {
             throw new ActivationTokenException("Token has already expired!");
         }
         final User user = token.getUser();
-        if(user.getEnabled()) {
+        if (user.getEnabled()) {
             throw new ActivationTokenException("User account is already activated!");
         }
         activateUserAccount(user);
@@ -40,6 +40,7 @@ public class TokenService {
     private void activateUserAccount(final User user) {
         user.setEnabled(true);
         user.setActivationDate(LocalDateTime.now());
+        // TODO create and persist new Expenses object assigned to freshly activated user
     }
 
     @Transactional
