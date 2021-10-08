@@ -25,7 +25,12 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_seq")
     private Long id;
     private String name;
+    private Integer usages;
     @ManyToOne
     @JoinColumn(name = "expenses_id")
     private User user;
+
+    public void incrementUsages() {
+        this.usages++;
+    }
 }

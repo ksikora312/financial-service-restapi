@@ -11,7 +11,7 @@ public class NewToDoListElement {
     private Long listId;
     private String name;
     private String description;
-    @JsonFormat(pattern = ApplicationConstants.DATE_FORMAT)
+    @JsonFormat(pattern = ApplicationConstants.DATE_FORMAT_WITH_TIME)
     private LocalDateTime dueDate;
     private String priority;
 }
