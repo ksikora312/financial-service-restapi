@@ -2,6 +2,7 @@ package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -28,4 +29,8 @@ public interface OutcomeController {
     @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
     CategoriesDto getAllCategories(@AuthenticationPrincipal UserPrincipal userPrincipal);
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    OutcomeSummaryDto getOutcomesSummary(@AuthenticationPrincipal UserPrincipal userPrincipal);
 }

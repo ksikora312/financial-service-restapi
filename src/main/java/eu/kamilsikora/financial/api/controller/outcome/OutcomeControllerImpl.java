@@ -2,8 +2,10 @@ package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
 import eu.kamilsikora.financial.api.service.outcome.CategoryService;
+import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.RegularOutcomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OutcomeControllerImpl implements OutcomeController {
 
     private final RegularOutcomeService regularOutcomeService;
+    private final OutcomeService outcomeService;
     private final CategoryService categoryService;
 
     @Override
@@ -28,5 +31,10 @@ public class OutcomeControllerImpl implements OutcomeController {
     @Override
     public CategoriesDto getAllCategories(final UserPrincipal userPrincipal) {
         return categoryService.getAllCategories(userPrincipal);
+    }
+
+    @Override
+    public OutcomeSummaryDto getOutcomesSummary(UserPrincipal userPrincipal) {
+        return outcomeService.getSummaryOfAllOutcomes(userPrincipal);
     }
 }
