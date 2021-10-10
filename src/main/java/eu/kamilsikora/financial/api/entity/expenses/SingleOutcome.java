@@ -13,7 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -32,7 +32,7 @@ public abstract class SingleOutcome {
     protected String item;
     protected Double value;
     protected OutcomeType outcomeType;
-    protected LocalDateTime date;
+    protected Date date;
     @OneToOne
     @JoinColumn(name = "category_id")
     protected Category category;

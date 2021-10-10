@@ -6,15 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 public class NewOutcomeDto {
     private String item;
     private Double value;
-    private String outcomeType;
-    @JsonFormat(pattern = ApplicationConstants.DATE_FORMAT_WITHOUT_TIME)
-    private LocalDateTime date;
+    @JsonFormat(pattern = ApplicationConstants.DATE_FORMAT_WITHOUT_TIME, shape = JsonFormat.Shape.STRING)
+    private Date date;
     private Long categoryId;
     private String description;
 }
