@@ -6,6 +6,8 @@ import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
+import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
+import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.entity.expenses.RegularSingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
@@ -18,7 +20,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Mapper(componentModel = "spring", imports = OutcomeType.class)
+@Mapper(componentModel = "spring", imports = {OutcomeType.class, LocalDate.class, Date.class})
 public abstract class OutcomeMapper {
 
     @AfterMapping
@@ -31,7 +33,7 @@ public abstract class OutcomeMapper {
     @AfterMapping
     protected void handleDate(@MappingTarget ContinuityOutcome continuityOutcome) {
         continuityOutcome.setAddedDate(LocalDateTime.now());
-        continuityOutcome.setLastUsage(LocalDateTime.now());
+        continuityOutcome.setLastUsage(continuityOutcome.getAddedDate());
     }
 
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.REGULAR_OUTCOME)")
@@ -46,5 +48,13 @@ public abstract class OutcomeMapper {
 
     @Mapping(target = "user", source = "user")
     @Mapping(target = "category", source = "category")
+    @Mapping(target = "id", ignore = true)
     public abstract ContinuityOutcome mapToEntity(NewContinuityOutcomeDto newContinuityOutcomeDto, User user, Category category);
+
+    @Mapping(target = "item", source = "continuityOutcome.description")
+    @Mapping(target = "expenses", source = "expenses")
+    @Mapping(target = "source", source = "continuityOutcome")
+    @Mapping(target = "date", expression = "java(Date.valueOf(LocalDate.now()))")
+    @Mapping(target = "outcomeType", expression = "java(OutcomeType.CONTINUOUS_OUTCOME)")
+    public abstract ContinuitySingleOutcome continuitySingleOutcome(ContinuityOutcome continuityOutcome, Expenses expenses);
 }

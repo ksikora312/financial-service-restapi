@@ -11,6 +11,7 @@ import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class RegularOutcomeService {
     private final OutcomeMapper outcomeMapper;
     private final ExceptionThrowingValidator validator;
 
-
+    @Transactional
     public void addNewOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final Category category = categoryService.resolveAndIncrementUsage(user, newOutcomeDto.getCategoryId());

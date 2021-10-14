@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class NewContinuityOutcomeDto {
     private Double value;
-    private Integer categoryId;
+    private String description;
+    private Long categoryId;
     private Integer timeIntervalInDays;
+    private Boolean createOutcome;
 }

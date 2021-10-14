@@ -1,10 +1,12 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
 import eu.kamilsikora.financial.api.service.outcome.CategoryService;
+import eu.kamilsikora.financial.api.service.outcome.ContinuityOutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.RegularOutcomeService;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,18 @@ public class OutcomeControllerImpl implements OutcomeController {
 
     private final RegularOutcomeService regularOutcomeService;
     private final OutcomeService outcomeService;
+    private final ContinuityOutcomeService continuityOutcomeService;
+    // TODO: split into category controller
     private final CategoryService categoryService;
 
     @Override
     public void addRegularOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
         regularOutcomeService.addNewOutcome(userPrincipal, newOutcomeDto);
+    }
+
+    @Override
+    public void addContinuityOutcome(UserPrincipal userPrincipal, NewContinuityOutcomeDto newContinuityOutcomeDto) {
+        continuityOutcomeService.createContinuityOutcome(userPrincipal, newContinuityOutcomeDto);
     }
 
     @Override

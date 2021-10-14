@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
@@ -21,6 +22,10 @@ public interface OutcomeController {
     @PostMapping("/regular")
     @ResponseStatus(HttpStatus.CREATED)
     void addRegularOutcome(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody NewOutcomeDto newOutcomeDto);
+
+    @PostMapping("/continuity")
+    @ResponseStatus(HttpStatus.CREATED)
+    void addContinuityOutcome(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody NewContinuityOutcomeDto newContinuityOutcomeDto);
 
     @PostMapping("/category/{category}")
     @ResponseStatus(HttpStatus.CREATED)
