@@ -22,7 +22,7 @@ public class SimpleAsyncEmailService implements EmailService {
         simpleMailMessage.setTo(token.getUser().getEmail());
         simpleMailMessage.setSubject("Financial management app - Account activation");
         simpleMailMessage.setText("Click link to activate an account: \n" +
-                "<a href=http://localhost:8080/financial/api/activate/" + token.getToken() + "/>");
+                "<a href=http://localhost:8080/finance-management/api/activate/" + token.getToken() + "/>");
         emailSender.send(simpleMailMessage);
     }
 }
