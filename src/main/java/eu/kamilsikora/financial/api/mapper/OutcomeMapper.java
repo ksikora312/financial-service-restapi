@@ -19,6 +19,7 @@ import org.mapstruct.MappingTarget;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Mapper(componentModel = "spring", imports = {OutcomeType.class, LocalDate.class, Date.class})
 public abstract class OutcomeMapper {
@@ -32,8 +33,11 @@ public abstract class OutcomeMapper {
 
     @AfterMapping
     protected void handleDate(@MappingTarget ContinuityOutcome continuityOutcome) {
-        continuityOutcome.setAddedDate(LocalDateTime.now());
-        continuityOutcome.setLastUsage(continuityOutcome.getAddedDate());
+        final LocalDateTime now = LocalDateTime.now();
+        continuityOutcome.setAddedDate(now);
+        continuityOutcome.setLastUsage(now);
+        final LocalDateTime nextUsage = now.plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS);
+        continuityOutcome.setNextUsage(nextUsage);
     }
 
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.REGULAR_OUTCOME)")

@@ -30,6 +30,7 @@ public class ContinuityOutcome {
     private String description;
     private LocalDateTime addedDate;
     private LocalDateTime lastUsage;
+    private LocalDateTime nextUsage;
     private Double value;
     private Integer timeIntervalInDays;
     @OneToOne
