@@ -9,6 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ContinuityOutcomesOverviewDto {
-    private List<ContinuityOutcomeOverviewDto> continuityOutcomes;
+public class OutcomesOverviewDto {
+    private List<OutcomeOverviewDto> continuityOutcomes;
 }

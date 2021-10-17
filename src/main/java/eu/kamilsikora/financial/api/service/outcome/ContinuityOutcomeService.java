@@ -2,8 +2,8 @@ package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeDetailsDto;
-import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
-import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomesOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,13 +58,13 @@ public class ContinuityOutcomeService {
    }
 
     @Transactional(readOnly = true)
-    public ContinuityOutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
        final User user = userHelperService.getActiveUser(userPrincipal);
        final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findByUserAndActive(user, true);
-       final List<ContinuityOutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()
-               .map(outcomeMapper::mapToDto)
+       final List<OutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()
+               .map(outcomeMapper::mapToOverviewDto)
                .collect(Collectors.toList());
-       return new ContinuityOutcomesOverviewDto(continuityOutcomesDto);
+       return new OutcomesOverviewDto(continuityOutcomesDto);
    }
 
     @Transactional(readOnly = true)

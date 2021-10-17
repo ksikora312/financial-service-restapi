@@ -29,7 +29,7 @@ public abstract class SingleOutcome {
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "outcome_seq")
     protected Long outcomeId;
-    protected String item;
+    protected String name;
     protected Double value;
     protected OutcomeType outcomeType;
     protected Date date;

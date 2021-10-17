@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ContinuityOutcomeOverviewDto {
+public class OutcomeOverviewDto {
     private Long id;
-    private String description;
+    private String name;
     private Double value;
 }

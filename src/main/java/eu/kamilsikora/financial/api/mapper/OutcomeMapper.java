@@ -1,7 +1,7 @@
 package eu.kamilsikora.financial.api.mapper;
 
 import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeDetailsDto;
-import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.CreatedOutcomesDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
@@ -66,7 +66,6 @@ public abstract class OutcomeMapper {
     @Mapping(target = "id", ignore = true)
     public abstract ContinuityOutcome mapToEntity(NewContinuityOutcomeDto newContinuityOutcomeDto, User user, Category category);
 
-    @Mapping(target = "item", source = "continuityOutcome.description")
     @Mapping(target = "expenses", source = "expenses")
     @Mapping(target = "source", source = "continuityOutcome")
     @Mapping(target = "date", expression = "java(Date.valueOf(LocalDate.now()))")
@@ -80,7 +79,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "continuityOutcome.nextUsage", expression = "java(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS))")
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 
-    public abstract ContinuityOutcomeOverviewDto mapToDto(ContinuityOutcome continuityOutcome);
+    public abstract OutcomeOverviewDto mapToOverviewDto(ContinuityOutcome continuityOutcome);
 
     @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")
     @Mapping(target = "date", dateFormat = "dd.MM.yyyy")

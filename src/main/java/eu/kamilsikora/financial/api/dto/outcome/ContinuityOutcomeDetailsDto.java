@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class ContinuityOutcomeDetailsDto {
     private Long id;
-    private String description;
+    private String name;
     private Boolean active;
     private String addedDate;
     private String lastUsage;

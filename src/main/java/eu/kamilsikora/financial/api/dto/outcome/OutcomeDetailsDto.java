@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class OutcomeDetailsDto {
     private Long outcomeId;
-    private String item;
+    private String name;
     private Double value;
     private String outcomeType;
     private String date;
