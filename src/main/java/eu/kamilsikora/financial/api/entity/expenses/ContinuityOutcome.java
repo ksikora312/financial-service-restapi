@@ -28,6 +28,7 @@ public class ContinuityOutcome {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "continuity_seq")
     private Long id;
     private String description;
+    private Boolean active;
     private LocalDateTime addedDate;
     private LocalDateTime lastUsage;
     private LocalDateTime nextUsage;

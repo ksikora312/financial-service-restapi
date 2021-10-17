@@ -12,7 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface ContinuityOutcomeRepository extends JpaRepository<ContinuityOutcome, Long> {
-    @Query("SELECT c FROM ContinuityOutcome c WHERE c.nextUsage < ?1")
+    @Query("SELECT c FROM ContinuityOutcome c WHERE c.nextUsage < ?1 and c.active = true")
     List<ContinuityOutcome> findAllRequiringOutcomeCreation(LocalDateTime now);
     Optional<ContinuityOutcome> findByUserAndId(User user, Long id);
+    List<ContinuityOutcome> findByUserAndActive(User user, Boolean active);
 }

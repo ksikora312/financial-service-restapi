@@ -1,6 +1,8 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
@@ -16,6 +18,9 @@ import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +45,7 @@ public class ContinuityOutcomeService {
         }
     }
 
+    @Transactional
     public void updateContinuityOutcome(final UserPrincipal userPrincipal, final UpdateContinuityOutcomeDto updateContinuityOutcomeDto) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final ContinuityOutcome continuityOutcome = continuityOutcomeRepository.findByUserAndId(user, updateContinuityOutcomeDto.getId())
@@ -48,6 +54,16 @@ public class ContinuityOutcomeService {
         outcomeMapper.mapIntoContinuityOutcome(continuityOutcome, updateContinuityOutcomeDto, category);
         validator.validate(continuityOutcome);
         continuityOutcomeRepository.save(continuityOutcome);
+   }
+
+   @Transactional(readOnly = true)
+    public ContinuityOutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
+       final User user = userHelperService.getActiveUser(userPrincipal);
+       final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findByUserAndActive(user, true);
+       final List<ContinuityOutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()
+               .map(outcomeMapper::mapToDto)
+               .collect(Collectors.toList());
+       return new ContinuityOutcomesOverviewDto(continuityOutcomesDto);
    }
 
 }

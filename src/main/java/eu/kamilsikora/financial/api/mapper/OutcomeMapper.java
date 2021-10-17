@@ -1,5 +1,6 @@
 package eu.kamilsikora.financial.api.mapper;
 
+import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
@@ -43,6 +44,7 @@ public abstract class OutcomeMapper {
         }
         final LocalDateTime nextUsage = continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS);
         continuityOutcome.setNextUsage(nextUsage);
+        continuityOutcome.setActive(true);
     }
 
 
@@ -74,4 +76,6 @@ public abstract class OutcomeMapper {
     @Mapping(target = "continuityOutcome.user", ignore = true)
     @Mapping(target = "continuityOutcome.nextUsage", expression = "java(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS))")
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
+
+    public abstract ContinuityOutcomeOverviewDto mapToDto(ContinuityOutcome continuityOutcome);
 }
