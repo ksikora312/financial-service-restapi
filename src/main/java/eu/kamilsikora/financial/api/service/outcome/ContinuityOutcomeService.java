@@ -2,10 +2,12 @@ package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
+import eu.kamilsikora.financial.api.dto.outcome.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
+import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuitySingleOutcomeRepository;
@@ -37,4 +39,15 @@ public class ContinuityOutcomeService {
             continuitySingleOutcomeRepository.save(continuitySingleOutcome);
         }
     }
+
+    public void updateContinuityOutcome(final UserPrincipal userPrincipal, final UpdateContinuityOutcomeDto updateContinuityOutcomeDto) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ContinuityOutcome continuityOutcome = continuityOutcomeRepository.findByUserAndId(user, updateContinuityOutcomeDto.getId())
+                .orElseThrow(() -> new ObjectDoesNotExistException("Continuity outcome does not exist!"));
+        final Category category = categoryService.resolveAndIncrementUsage(user, updateContinuityOutcomeDto.getCategoryId());
+        outcomeMapper.mapIntoContinuityOutcome(continuityOutcome, updateContinuityOutcomeDto, category);
+        validator.validate(continuityOutcome, updateContinuityOutcomeDto);
+        continuityOutcomeRepository.save(continuityOutcome);
+   }
+
 }

@@ -3,6 +3,7 @@ package eu.kamilsikora.financial.api.mapper;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
@@ -21,7 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Mapper(componentModel = "spring", imports = {OutcomeType.class, LocalDate.class, Date.class})
+@Mapper(componentModel = "spring", imports = {OutcomeType.class, LocalDate.class, Date.class, ChronoUnit.class})
 public abstract class OutcomeMapper {
 
     @AfterMapping
@@ -33,12 +34,15 @@ public abstract class OutcomeMapper {
 
     @AfterMapping
     protected void handleDate(@MappingTarget ContinuityOutcome continuityOutcome) {
-        final LocalDateTime now = LocalDateTime.now();
-        continuityOutcome.setAddedDate(now);
-        continuityOutcome.setLastUsage(now);
-        final LocalDateTime nextUsage = now.plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS);
+        if (continuityOutcome.getId() == null) {
+            final LocalDateTime now = LocalDateTime.now();
+            continuityOutcome.setAddedDate(now);
+            continuityOutcome.setLastUsage(now);
+        }
+        final LocalDateTime nextUsage = continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS);
         continuityOutcome.setNextUsage(nextUsage);
     }
+
 
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.REGULAR_OUTCOME)")
     @Mapping(target = "expenses", source = "user.expenses")
@@ -61,4 +65,10 @@ public abstract class OutcomeMapper {
     @Mapping(target = "date", expression = "java(Date.valueOf(LocalDate.now()))")
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.CONTINUOUS_OUTCOME)")
     public abstract ContinuitySingleOutcome continuitySingleOutcome(ContinuityOutcome continuityOutcome, Expenses expenses);
+
+    @Mapping(target = "continuityOutcome.id", ignore = true)
+    @Mapping(target = "continuityOutcome.category", source = "category")
+    @Mapping(target = "continuityOutcome.user", ignore = true)
+    @Mapping(target = "continuityOutcome.nextUsage", expression = "java(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS))")
+    public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 }
