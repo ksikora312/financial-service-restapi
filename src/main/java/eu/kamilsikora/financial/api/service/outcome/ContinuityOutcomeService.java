@@ -46,7 +46,7 @@ public class ContinuityOutcomeService {
                 .orElseThrow(() -> new ObjectDoesNotExistException("Continuity outcome does not exist!"));
         final Category category = categoryService.resolveAndIncrementUsage(user, updateContinuityOutcomeDto.getCategoryId());
         outcomeMapper.mapIntoContinuityOutcome(continuityOutcome, updateContinuityOutcomeDto, category);
-        validator.validate(continuityOutcome, updateContinuityOutcomeDto);
+        validator.validate(continuityOutcome);
         continuityOutcomeRepository.save(continuityOutcome);
    }
 

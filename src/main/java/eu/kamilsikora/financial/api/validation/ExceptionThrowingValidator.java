@@ -16,15 +16,26 @@ public class ExceptionThrowingValidator {
     }
 
     public <T, U> void validate(T t, U u, Class<?>... groups) throws ConstraintViolationException {
-        Set<ConstraintViolation<T>> tConstraintViolations = validator.validate(t, groups);
-        Set<ConstraintViolation<U>> uConstraintViolations = validator.validate(u, groups);
-        Stream<ConstraintViolation<T>> tStream = tConstraintViolations.stream();
-        Stream<ConstraintViolation<U>> uStream = uConstraintViolations.stream();
-        Set<String> errorMessages = Stream.concat(tStream, uStream)
+        final Set<ConstraintViolation<T>> tConstraintViolations = validator.validate(t, groups);
+        final Set<ConstraintViolation<U>> uConstraintViolations = validator.validate(u, groups);
+        final Stream<ConstraintViolation<T>> tStream = tConstraintViolations.stream();
+        final Stream<ConstraintViolation<U>> uStream = uConstraintViolations.stream();
+        final Set<String> errorMessages = Stream.concat(tStream, uStream)
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toSet());
 
         if (!errorMessages.isEmpty()) {
+            throw new ConstraintViolationException(errorMessages);
+        }
+    }
+
+    public <T> void validate(T t, Class<?>... groups) {
+        final Set<ConstraintViolation<T>> constraintViolations = validator.validate(t, groups);
+        final Set<String> errorMessages = constraintViolations.stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toSet());
+
+        if(!constraintViolations.isEmpty()) {
             throw new ConstraintViolationException(errorMessages);
         }
     }
