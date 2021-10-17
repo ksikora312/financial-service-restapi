@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OutcomeDetailsDto {
-    private Long outcomeId;
+    private Long id;
     private String name;
     private Double value;
     private String outcomeType;

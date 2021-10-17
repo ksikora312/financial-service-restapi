@@ -3,6 +3,7 @@ package eu.kamilsikora.financial.api.entity.expenses;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,8 @@ public abstract class SingleOutcome {
             allocationSize = 1
     )
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "outcome_seq")
-    protected Long outcomeId;
+    @Column(name = "outcome_id")
+    protected Long id;
     protected String name;
     protected Double value;
     protected OutcomeType outcomeType;

@@ -1,5 +1,6 @@
 package eu.kamilsikora.financial.api.mapper;
 
+import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.CreatedOutcomesDto;
@@ -54,6 +55,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.REGULAR_OUTCOME)")
     @Mapping(target = "expenses", source = "user.expenses")
     @Mapping(source = "category", target = "category")
+    @Mapping(target = "name", source = "newOutcomeDto.name")
     public abstract RegularSingleOutcome mapToEntity(NewOutcomeDto newOutcomeDto, User user, Category category);
 
     @Mapping(target = "outcomeType", expression = "java(singleOutcome.getOutcomeType().toString())")
@@ -71,6 +73,12 @@ public abstract class OutcomeMapper {
     @Mapping(target = "date", expression = "java(Date.valueOf(LocalDate.now()))")
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.CONTINUOUS_OUTCOME)")
     public abstract ContinuitySingleOutcome continuitySingleOutcome(ContinuityOutcome continuityOutcome, Expenses expenses);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "name", source = "updateOutcomeDto.name")
+    public abstract void mapIntoSingleOutcome(@MappingTarget SingleOutcome singleOutcome, UpdateOutcomeDto updateOutcomeDto, Category category);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "continuityOutcome.id", ignore = true)

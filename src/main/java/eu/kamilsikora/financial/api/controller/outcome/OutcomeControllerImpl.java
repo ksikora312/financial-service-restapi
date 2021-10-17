@@ -1,6 +1,8 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
@@ -38,6 +40,11 @@ public class OutcomeControllerImpl implements OutcomeController {
     @Override
     public void updateContinuityOutcome(UserPrincipal userPrincipal, UpdateContinuityOutcomeDto updateContinuityOutcomeDto) {
         continuityOutcomeService.updateContinuityOutcome(userPrincipal, updateContinuityOutcomeDto);
+    }
+
+    @Override
+    public OutcomeDetailsDto updateOutcome(UserPrincipal userPrincipal, UpdateOutcomeDto updateOutcomeDto) {
+        return outcomeService.updateOutcome(userPrincipal, updateOutcomeDto);
     }
 
     @Override
