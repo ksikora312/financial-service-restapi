@@ -1,11 +1,11 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
-import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
-import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.UpdateContinuityOutcomeDto;
+import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
+import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;

@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.dto.outcome;
+package eu.kamilsikora.financial.api.dto.outcome.continuity;
 
 import lombok.Getter;
 import lombok.Setter;

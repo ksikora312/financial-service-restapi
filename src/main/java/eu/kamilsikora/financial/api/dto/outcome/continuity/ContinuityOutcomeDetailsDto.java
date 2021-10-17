@@ -1,9 +1,8 @@
-package eu.kamilsikora.financial.api.dto.outcome;
+package eu.kamilsikora.financial.api.dto.outcome.continuity;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
