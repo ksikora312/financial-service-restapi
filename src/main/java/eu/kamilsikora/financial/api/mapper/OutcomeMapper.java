@@ -1,6 +1,8 @@
 package eu.kamilsikora.financial.api.mapper;
 
+import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.CreatedOutcomesDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
@@ -24,6 +26,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Mapper(componentModel = "spring", imports = {OutcomeType.class, LocalDate.class, Date.class, ChronoUnit.class})
 public abstract class OutcomeMapper {
@@ -54,7 +57,7 @@ public abstract class OutcomeMapper {
     public abstract RegularSingleOutcome mapToEntity(NewOutcomeDto newOutcomeDto, User user, Category category);
 
     @Mapping(target = "outcomeType", expression = "java(singleOutcome.getOutcomeType().toString())")
-    @Mapping(target = "date", expression = "java(singleOutcome.getDate().toString())")
+    @Mapping(target = "date", dateFormat = "dd.MM.yyyy")
     @Mapping(target = "category", expression = "java(singleOutcome.getCategory().getName())")
     public abstract OutcomeDetailsDto mapToDto(SingleOutcome singleOutcome);
 
@@ -78,4 +81,15 @@ public abstract class OutcomeMapper {
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 
     public abstract ContinuityOutcomeOverviewDto mapToDto(ContinuityOutcome continuityOutcome);
+
+    @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")
+    @Mapping(target = "date", dateFormat = "dd.MM.yyyy")
+    @Mapping(target = "category", expression = "java(continuitySingleOutcome.getCategory().getName())")
+    public abstract CreatedOutcomesDto mapToDto(ContinuitySingleOutcome continuitySingleOutcome);
+    public abstract List<CreatedOutcomesDto> mapToDto(List<ContinuitySingleOutcome> continuitySingleOutcomes);
+
+    @Mapping(target = "addedDate", dateFormat = "dd.MM.yyyy HH:mm")
+    @Mapping(target = "lastUsage", dateFormat = "dd.MM.yyyy HH:mm")
+    @Mapping(target = "nextUsage", dateFormat = "dd.MM.yyyy HH:mm")
+    public abstract ContinuityOutcomeDetailsDto mapToDetailsDto(ContinuityOutcome continuityOutcome);
 }

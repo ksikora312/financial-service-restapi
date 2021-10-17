@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.ContinuityOutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewContinuityOutcomeDto;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,7 +58,7 @@ public class ContinuityOutcomeService {
         continuityOutcomeRepository.save(continuityOutcome);
    }
 
-   @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public ContinuityOutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
        final User user = userHelperService.getActiveUser(userPrincipal);
        final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findByUserAndActive(user, true);
@@ -65,5 +67,13 @@ public class ContinuityOutcomeService {
                .collect(Collectors.toList());
        return new ContinuityOutcomesOverviewDto(continuityOutcomesDto);
    }
+
+    @Transactional(readOnly = true)
+    public ContinuityOutcomeDetailsDto getDetails(final UserPrincipal userPrincipal, final Long id) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ContinuityOutcome continuityOutcome = continuityOutcomeRepository.
+                findByUserAndId(user, id).orElseThrow(() -> new ObjectDoesNotExistException("Continuity outcome does not exist!"));
+        return outcomeMapper.mapToDetailsDto(continuityOutcome);
+    }
 
 }
