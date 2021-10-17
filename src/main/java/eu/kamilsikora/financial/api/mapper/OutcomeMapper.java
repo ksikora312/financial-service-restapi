@@ -13,9 +13,11 @@ import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.entity.expenses.RegularSingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -66,6 +68,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.CONTINUOUS_OUTCOME)")
     public abstract ContinuitySingleOutcome continuitySingleOutcome(ContinuityOutcome continuityOutcome, Expenses expenses);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "continuityOutcome.id", ignore = true)
     @Mapping(target = "continuityOutcome.category", source = "category")
     @Mapping(target = "continuityOutcome.user", ignore = true)
