@@ -1,5 +1,6 @@
 package eu.kamilsikora.financial.api.dto.outcome.continuity;
 
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,5 @@ public class ContinuityOutcomeDetailsDto {
     private String lastUsage;
     private String nextUsage;
     private Double value;
-    private List<CreatedOutcomesDto> producedOutcomes;
+    private List<OutcomeDetailsDto> producedOutcomes;
 }

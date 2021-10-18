@@ -3,7 +3,6 @@ package eu.kamilsikora.financial.api.mapper;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
-import eu.kamilsikora.financial.api.dto.outcome.continuity.CreatedOutcomesDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
@@ -92,8 +91,8 @@ public abstract class OutcomeMapper {
     @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")
     @Mapping(target = "date", dateFormat = "dd.MM.yyyy")
     @Mapping(target = "category", expression = "java(continuitySingleOutcome.getCategory().getName())")
-    public abstract CreatedOutcomesDto mapToDto(ContinuitySingleOutcome continuitySingleOutcome);
-    public abstract List<CreatedOutcomesDto> mapToDto(List<ContinuitySingleOutcome> continuitySingleOutcomes);
+    public abstract OutcomeDetailsDto mapToDto(ContinuitySingleOutcome continuitySingleOutcome);
+    public abstract List<OutcomeDetailsDto> mapToDto(List<ContinuitySingleOutcome> continuitySingleOutcomes);
 
     @Mapping(target = "addedDate", dateFormat = "dd.MM.yyyy HH:mm")
     @Mapping(target = "lastUsage", dateFormat = "dd.MM.yyyy HH:mm")

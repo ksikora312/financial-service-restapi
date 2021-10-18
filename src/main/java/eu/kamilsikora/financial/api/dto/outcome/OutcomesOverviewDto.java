@@ -10,5 +10,5 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class OutcomesOverviewDto {
-    private List<OutcomeOverviewDto> continuityOutcomes;
+    private List<OutcomeOverviewDto> outcomes;
 }
