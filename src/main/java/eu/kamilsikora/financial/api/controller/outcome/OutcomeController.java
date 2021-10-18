@@ -1,15 +1,14 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,17 +47,7 @@ public interface OutcomeController {
     @GetMapping("/continuity/{id}")
     ContinuityOutcomeDetailsDto getDetails(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long id);
 
-    @PostMapping("/category/{category}")
-    @ResponseStatus(HttpStatus.CREATED)
-    void addCategory(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("category") String category);
-
-    @GetMapping("/category")
-    @ResponseStatus(HttpStatus.OK)
-    CategoriesDto getAllCategories(@AuthenticationPrincipal UserPrincipal userPrincipal);
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     OutcomeSummaryDto getOutcomesSummary(@AuthenticationPrincipal UserPrincipal userPrincipal);
-
-
 }

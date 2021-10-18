@@ -24,8 +24,6 @@ public class OutcomeControllerImpl implements OutcomeController {
     private final RegularOutcomeService regularOutcomeService;
     private final OutcomeService outcomeService;
     private final ContinuityOutcomeService continuityOutcomeService;
-    // TODO: split into category controller
-    private final CategoryService categoryService;
 
     @Override
     public void addRegularOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
@@ -55,16 +53,6 @@ public class OutcomeControllerImpl implements OutcomeController {
     @Override
     public ContinuityOutcomeDetailsDto getDetails(UserPrincipal userPrincipal, Long id) {
         return continuityOutcomeService.getDetails(userPrincipal, id);
-    }
-
-    @Override
-    public void addCategory(final UserPrincipal userPrincipal, final String category) {
-        categoryService.addNewCategory(userPrincipal, category);
-    }
-
-    @Override
-    public CategoriesDto getAllCategories(final UserPrincipal userPrincipal) {
-        return categoryService.getAllCategories(userPrincipal);
     }
 
     @Override
