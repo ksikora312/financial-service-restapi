@@ -10,6 +10,7 @@ import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.CategoryMapper;
 import eu.kamilsikora.financial.api.repository.outcome.CategoryRepository;
 import eu.kamilsikora.financial.api.service.UserHelperService;
+import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +25,7 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final UserHelperService userHelperService;
+    private final ExceptionThrowingValidator validator;
     private final CategoryMapper categoryMapper;
 
     private static final String UNCATEGORIZED_CATEGORY = "Uncategorized";
@@ -33,9 +35,23 @@ public class CategoryService {
         final User user = userHelperService.getActiveUser(userPrincipal);
         String normalizedCategoryName = normalizeCategoryName(categoryName);
         categoryRepository.findByUserAndName(user, normalizedCategoryName).ifPresent(this::handleAlreadyExistingCategory);
-        final Category category = buildCategory(user, normalizedCategoryName);
+        final Category category = buildNewCategory(user, normalizedCategoryName);
+        validator.validate(category);
         user.getCategories().add(category);
         categoryRepository.save(category);
+    }
+
+    @Transactional
+    public CategoryDto updateCategory(final UserPrincipal userPrincipal, final Long id, final String name) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final String normalizedCategoryName = normalizeCategoryName(name);
+        categoryRepository.findByUserAndName(user, normalizedCategoryName).ifPresent(this::handleAlreadyExistingCategory);
+        final Category category = categoryRepository.findByUserAndId(user, id)
+                .orElseThrow(() -> new ObjectDoesNotExistException("Category does not exist!"));
+        category.setName(normalizedCategoryName);
+        validator.validate(category);
+        categoryRepository.save(category);
+        return categoryMapper.mapToDto(category);
     }
 
     private String normalizeCategoryName(final String category) {
@@ -47,7 +63,7 @@ public class CategoryService {
         throw new ObjectAlreadyExistsException("Category " + category.getName() + " already exists!");
     }
 
-    private Category buildCategory(final User user, final String categoryName) {
+    private Category buildNewCategory(final User user, final String categoryName) {
         final Category category = new Category();
         category.setUser(user);
         category.setName(categoryName);

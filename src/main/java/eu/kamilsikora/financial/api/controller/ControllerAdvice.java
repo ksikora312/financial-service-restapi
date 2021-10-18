@@ -16,6 +16,7 @@ import java.util.Set;
 @ResponseBody
 public class ControllerAdvice {
 
+    // TODO: handle ObjectAlreadyExistsException
     // TODO: handle ActivationTokenException
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
