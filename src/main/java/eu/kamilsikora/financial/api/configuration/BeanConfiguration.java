@@ -1,10 +1,13 @@
 package eu.kamilsikora.financial.api.configuration;
 
+import eu.kamilsikora.financial.api.service.outcome.OutcomeOverviewFactory;
+import eu.kamilsikora.financial.api.service.outcome.OverviewProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+import java.util.List;
 import java.util.Properties;
 
 @Configuration
@@ -24,6 +27,11 @@ public class BeanConfiguration {
         props.put("mail.smtp.starttls.enable", "true");
 
         return mailSender;
+    }
+
+    @Bean
+    public OutcomeOverviewFactory overviewFactory(List<OverviewProvider> overviewProviders) {
+        return new OutcomeOverviewFactory(overviewProviders);
     }
 
 }

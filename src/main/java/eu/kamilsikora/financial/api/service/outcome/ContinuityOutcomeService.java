@@ -10,6 +10,7 @@ import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
+import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ContinuityOutcomeService {
+public class ContinuityOutcomeService implements OverviewProvider {
     private final OutcomeMapper outcomeMapper;
     private final ContinuityOutcomeRepository continuityOutcomeRepository;
     private final ContinuitySingleOutcomeRepository continuitySingleOutcomeRepository;
@@ -75,4 +76,8 @@ public class ContinuityOutcomeService {
         return outcomeMapper.mapToDetailsDto(continuityOutcome);
     }
 
+    @Override
+    public boolean canHandle(OutcomeType outcomeType) {
+        return outcomeType == OutcomeType.CONTINUOUS_OUTCOME;
+    }
 }

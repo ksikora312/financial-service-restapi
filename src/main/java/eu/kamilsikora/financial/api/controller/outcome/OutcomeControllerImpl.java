@@ -9,9 +9,9 @@ import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeD
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.category.CategoriesDto;
-import eu.kamilsikora.financial.api.service.outcome.CategoryService;
+import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.service.outcome.ContinuityOutcomeService;
+import eu.kamilsikora.financial.api.service.outcome.OutcomeOverviewFactory;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.RegularOutcomeService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class OutcomeControllerImpl implements OutcomeController {
     private final RegularOutcomeService regularOutcomeService;
     private final OutcomeService outcomeService;
     private final ContinuityOutcomeService continuityOutcomeService;
+    private final OutcomeOverviewFactory overviewFactory;
 
     @Override
     public void addRegularOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
@@ -31,32 +32,32 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public void addContinuityOutcome(UserPrincipal userPrincipal, NewContinuityOutcomeDto newContinuityOutcomeDto) {
+    public void addContinuityOutcome(final UserPrincipal userPrincipal, final NewContinuityOutcomeDto newContinuityOutcomeDto) {
         continuityOutcomeService.createContinuityOutcome(userPrincipal, newContinuityOutcomeDto);
     }
 
     @Override
-    public void updateContinuityOutcome(UserPrincipal userPrincipal, UpdateContinuityOutcomeDto updateContinuityOutcomeDto) {
+    public void updateContinuityOutcome(final UserPrincipal userPrincipal, final UpdateContinuityOutcomeDto updateContinuityOutcomeDto) {
         continuityOutcomeService.updateContinuityOutcome(userPrincipal, updateContinuityOutcomeDto);
     }
 
     @Override
-    public OutcomeDetailsDto updateOutcome(UserPrincipal userPrincipal, UpdateOutcomeDto updateOutcomeDto) {
+    public OutcomeDetailsDto updateOutcome(final UserPrincipal userPrincipal, final UpdateOutcomeDto updateOutcomeDto) {
         return outcomeService.updateOutcome(userPrincipal, updateOutcomeDto);
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(UserPrincipal userPrincipal) {
-        return continuityOutcomeService.getOverview(userPrincipal);
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
+        return overviewFactory.forType(OutcomeType.CONTINUOUS_OUTCOME).getOverview(userPrincipal);
     }
 
     @Override
-    public ContinuityOutcomeDetailsDto getDetails(UserPrincipal userPrincipal, Long id) {
+    public ContinuityOutcomeDetailsDto getDetails(final UserPrincipal userPrincipal, final Long id) {
         return continuityOutcomeService.getDetails(userPrincipal, id);
     }
 
     @Override
-    public OutcomeSummaryDto getOutcomesSummary(UserPrincipal userPrincipal) {
+    public OutcomeSummaryDto getOutcomesSummary(final UserPrincipal userPrincipal) {
         return outcomeService.getSummaryOfAllOutcomes(userPrincipal);
     }
 }
