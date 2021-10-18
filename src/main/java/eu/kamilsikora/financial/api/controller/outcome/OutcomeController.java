@@ -9,6 +9,7 @@ import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
+import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequestMapping("/outcome/")
@@ -40,9 +42,9 @@ public interface OutcomeController {
     @ResponseStatus(HttpStatus.OK)
     OutcomeDetailsDto updateOutcome(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateOutcomeDto updateOutcomeDto);
 
-    @GetMapping("/continuity")
+    @GetMapping("/overview")
     @ResponseStatus(HttpStatus.OK)
-    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal);
+    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OutcomeType type);
 
     @GetMapping("/continuity/{id}")
     ContinuityOutcomeDetailsDto getDetails(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long id);

@@ -10,4 +10,5 @@ public class OutcomeOverviewDto {
     private String name;
     private Double value;
     private String type;
+    // TODO: category? date?
 }

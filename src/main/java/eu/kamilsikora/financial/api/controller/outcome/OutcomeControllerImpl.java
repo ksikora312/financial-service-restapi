@@ -47,8 +47,8 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
-        return overviewFactory.forType(OutcomeType.CONTINUOUS_OUTCOME).getOverview(userPrincipal);
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type) {
+        return overviewFactory.forType(type).getOverview(userPrincipal);
     }
 
     @Override

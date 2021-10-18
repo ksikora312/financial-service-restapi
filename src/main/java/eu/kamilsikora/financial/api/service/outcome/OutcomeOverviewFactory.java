@@ -14,6 +14,7 @@ public class OutcomeOverviewFactory {
             if(overviewProvider.canHandle(outcomeType))
                 return overviewProvider;
         }
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("Provider for given type does not exist!");
     }
 }
+
