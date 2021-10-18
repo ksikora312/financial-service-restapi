@@ -86,6 +86,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "continuityOutcome.nextUsage", expression = "java(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS))")
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 
+    @Mapping(target = "type", expression = "java(OutcomeType.CONTINUOUS_OUTCOME.name().replace('_', ' '))")
     public abstract OutcomeOverviewDto mapToOverviewDto(ContinuityOutcome continuityOutcome);
 
     @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")

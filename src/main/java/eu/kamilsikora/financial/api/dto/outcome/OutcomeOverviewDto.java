@@ -9,4 +9,5 @@ public class OutcomeOverviewDto {
     private Long id;
     private String name;
     private Double value;
+    private String type;
 }
