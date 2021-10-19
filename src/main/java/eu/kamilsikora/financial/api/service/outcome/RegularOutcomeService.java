@@ -36,12 +36,12 @@ public class RegularOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public boolean canHandle(OutcomeType outcomeType) {
-        return outcomeType == OutcomeType.REGULAR_OUTCOME;
+    public boolean canHandle(final OutcomeType outcomeType) {
+        return (outcomeType == OutcomeType.REGULAR_OUTCOME || outcomeType == OutcomeType.ALL);
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(UserPrincipal userPrincipal) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
         return new OutcomesOverviewDto(List.of());
     }
 }
