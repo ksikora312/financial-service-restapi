@@ -65,9 +65,9 @@ public class ContinuityOutcomeService implements OverviewProvider {
 
     @Override
     @Transactional(readOnly = true)
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final List<Long> categories) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final FilteringParameters filteringParameters = new FilteringParametersBuilder(startDate, endDate, type, categories, user).build();
+        final FilteringParameters filteringParameters = new FilteringParametersBuilder(startDate, endDate, type, category, user).build();
         final Specification<ContinuityOutcome> specification = new ContinuityOutcomeSpecification(filteringParameters).buildOnParameters();
         final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findAll(specification);
         final List<OutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()

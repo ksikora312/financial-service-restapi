@@ -15,7 +15,7 @@ public class SingleOutcomeSpecification<T extends SingleOutcome> {
                 .and(startDate())
                 .and(endDate())
                 .and(type());
-        if(!parameters.getCategories().isEmpty()) {
+        if(parameters.getCategory() != null) {
             return spec.and(category());
         }
         return spec;
@@ -38,7 +38,7 @@ public class SingleOutcomeSpecification<T extends SingleOutcome> {
     }
 
     private Specification<T> category() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.in(root.get("category").in(parameters.getCategories()));
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), parameters.getCategory());
     }
 
 }

@@ -18,7 +18,7 @@ public class ContinuityOutcomeSpecification {
                 .and(active())
                 .and(startDate())
                 .and(endDate());
-        if (!parameters.getCategories().isEmpty()) {
+        if (parameters.getCategory() != null) {
             return spec.and(category());
         }
         return spec;
@@ -40,7 +40,7 @@ public class ContinuityOutcomeSpecification {
     }
 
     private Specification<ContinuityOutcome> category() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), parameters.getCategories().get(0));
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), parameters.getCategory());
     }
 
     private Specification<ContinuityOutcome> active() {

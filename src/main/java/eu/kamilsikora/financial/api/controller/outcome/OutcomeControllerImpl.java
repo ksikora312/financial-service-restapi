@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class OutcomeControllerImpl implements OutcomeController {
 
     @Override
     public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
-        return overviewFactory.forType(type).getOverview(userPrincipal, type, startDate, endDate, category != null ? List.of(category) : List.of());
+        return overviewFactory.forType(type).getOverview(userPrincipal, type, startDate, endDate, category);
     }
 
     @Override

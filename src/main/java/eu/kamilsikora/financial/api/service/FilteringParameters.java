@@ -10,7 +10,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +18,7 @@ public class FilteringParameters {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final OutcomeType type;
-    private final List<Category> categories;
+    private final Category category;
     private final Expenses expenses;
     private final User user;
 }

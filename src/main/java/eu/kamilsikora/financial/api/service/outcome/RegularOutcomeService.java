@@ -42,7 +42,7 @@ public class RegularOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final List<Long> categories) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
         return new OutcomesOverviewDto(List.of());
     }
 }
