@@ -2,6 +2,7 @@ package eu.kamilsikora.financial.api.entity;
 
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.Expenses;
+import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.validation.UniqueUsernameAndEmail;
@@ -49,11 +50,24 @@ public class User {
     private LocalDateTime activationDate;
     private Boolean enabled;
     @OneToMany(mappedBy = "user")
+    private List<ShoppingList> shoppingLists;
+    @OneToMany(mappedBy = "user")
     private List<TodoList> todoLists;
     @OneToOne(mappedBy = "user")
     private Expenses expenses;
     @OneToMany(mappedBy = "user")
     private List<Category> categories;
+
+    public void addNewShoppingList(final ShoppingList shoppingList) {
+        final Optional<ShoppingList> primary = shoppingLists.stream().filter(ShoppingList::getIsPrimary).findFirst();
+        if(primary.isEmpty()) {
+            shoppingList.setIsPrimary(true);
+        }
+        else if (shoppingList.getIsPrimary()) {
+            shoppingLists.stream().filter(ShoppingList::getIsPrimary).findFirst().ifPresent(list -> list.setIsPrimary(false));
+        }
+        shoppingLists.add(shoppingList);
+    }
 
     public void addNewList(final TodoList todoList) {
         Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
