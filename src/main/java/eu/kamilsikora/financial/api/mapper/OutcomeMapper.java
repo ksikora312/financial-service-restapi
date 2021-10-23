@@ -34,7 +34,7 @@ public abstract class OutcomeMapper {
     @AfterMapping
     protected void handleDate(@MappingTarget RegularSingleOutcome regularSingleOutcome) {
         if (regularSingleOutcome.getDate() == null) {
-            regularSingleOutcome.setDate(Date.valueOf(LocalDate.now()));
+            regularSingleOutcome.setDate(LocalDate.now());
         }
     }
 
@@ -69,7 +69,7 @@ public abstract class OutcomeMapper {
 
     @Mapping(target = "expenses", source = "expenses")
     @Mapping(target = "source", source = "continuityOutcome")
-    @Mapping(target = "date", expression = "java(Date.valueOf(LocalDate.now()))")
+    @Mapping(target = "date", expression = "java(continuityOutcome.getLastUsage().toLocalDate())")
     @Mapping(target = "outcomeType", expression = "java(OutcomeType.CONTINUOUS_OUTCOME)")
     public abstract ContinuitySingleOutcome continuitySingleOutcome(ContinuityOutcome continuityOutcome, Expenses expenses);
 
@@ -87,6 +87,7 @@ public abstract class OutcomeMapper {
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 
     @Mapping(target = "type", expression = "java(OutcomeType.CONTINUOUS_OUTCOME.name().replace('_', ' '))")
+    @Mapping(target = "date", expression = "java(continuityOutcome.getLastUsage().toLocalDate().toString())")
     public abstract OutcomeOverviewDto mapToOverviewDto(ContinuityOutcome continuityOutcome);
 
     @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")

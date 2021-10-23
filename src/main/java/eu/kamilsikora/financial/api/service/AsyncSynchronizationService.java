@@ -46,14 +46,15 @@ public class AsyncSynchronizationService implements Runnable {
     private List<ContinuitySingleOutcome> processSingleContinuityOutcome(final ContinuityOutcome continuityOutcome) {
         List<ContinuitySingleOutcome> outcomesToBeSaved = new ArrayList<>();
         while (LocalDateTime.now().isAfter(continuityOutcome.getNextUsage())) {
-            final ContinuitySingleOutcome continuitySingleOutcome =
-                    outcomeMapper.continuitySingleOutcome(continuityOutcome, continuityOutcome.getUser().getExpenses());
-            outcomesToBeSaved.add(continuitySingleOutcome);
             continuityOutcome.setLastUsage(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS));
             final LocalDateTime currentNextUsage = continuityOutcome.getNextUsage();
             final LocalDateTime newNextUsage = currentNextUsage.plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS);
             continuityOutcome.setNextUsage(newNextUsage);
+            final ContinuitySingleOutcome continuitySingleOutcome =
+                    outcomeMapper.continuitySingleOutcome(continuityOutcome, continuityOutcome.getUser().getExpenses());
+            outcomesToBeSaved.add(continuitySingleOutcome);
         }
+        log.info(continuityOutcome.getId() + " produced " + outcomesToBeSaved.size() + " outcomes");
         return outcomesToBeSaved;
     }
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -41,7 +42,7 @@ public class RegularOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final List<Long> categories) {
         return new OutcomesOverviewDto(List.of());
     }
 }

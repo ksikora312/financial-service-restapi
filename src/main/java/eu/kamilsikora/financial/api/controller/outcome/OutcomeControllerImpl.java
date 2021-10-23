@@ -1,13 +1,13 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.service.outcome.ContinuityOutcomeService;
@@ -17,6 +17,9 @@ import eu.kamilsikora.financial.api.service.outcome.RegularOutcomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 public class OutcomeControllerImpl implements OutcomeController {
@@ -25,6 +28,7 @@ public class OutcomeControllerImpl implements OutcomeController {
     private final OutcomeService outcomeService;
     private final ContinuityOutcomeService continuityOutcomeService;
     private final OutcomeOverviewFactory overviewFactory;
+
 
     @Override
     public void addRegularOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
@@ -47,8 +51,8 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type) {
-        return overviewFactory.forType(type).getOverview(userPrincipal);
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
+        return overviewFactory.forType(type).getOverview(userPrincipal, type, startDate, endDate, category != null ? List.of(category) : List.of());
     }
 
     @Override

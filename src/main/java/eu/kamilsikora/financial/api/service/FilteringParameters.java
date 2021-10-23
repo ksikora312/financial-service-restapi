@@ -9,15 +9,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
 @Builder(access = AccessLevel.PACKAGE)
 public class FilteringParameters {
-    private final Date startDate;
-    private final Date endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
     private final OutcomeType type;
     private final List<Category> categories;
     private final Expenses expenses;

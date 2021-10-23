@@ -11,6 +11,7 @@ import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeD
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import io.swagger.annotations.Api;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import java.time.LocalDate;
 
 @RequestMapping("/outcome/")
 @Api(tags = {"Outcome controller"})
@@ -44,7 +47,10 @@ public interface OutcomeController {
 
     @GetMapping("/overview")
     @ResponseStatus(HttpStatus.OK)
-    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OutcomeType type);
+    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OutcomeType type,
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
+                                    @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate,
+                                    @RequestParam(required = false) Long category);
 
     @GetMapping("/continuity/{id}")
     ContinuityOutcomeDetailsDto getDetails(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long id);
