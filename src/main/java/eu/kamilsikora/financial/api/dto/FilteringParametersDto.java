@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.service;
+package eu.kamilsikora.financial.api.dto;
 
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Builder(access = AccessLevel.PACKAGE)
-public class FilteringParameters {
+public class FilteringParametersDto {
     private final LocalDate startDate;
     private final LocalDate endDate;
     private final OutcomeType type;

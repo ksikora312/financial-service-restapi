@@ -1,7 +1,7 @@
 package eu.kamilsikora.financial.api.repository.outcome;
 
+import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
-import eu.kamilsikora.financial.api.service.FilteringParameters;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class ContinuityOutcomeSpecification {
 
-    private final FilteringParameters parameters;
+    private final FilteringParametersDto parameters;
 
     public Specification<ContinuityOutcome> buildOnParameters() {
         final Specification<ContinuityOutcome> spec = user()

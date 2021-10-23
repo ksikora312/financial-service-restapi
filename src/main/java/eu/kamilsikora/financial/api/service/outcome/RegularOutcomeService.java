@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.entity.User;
@@ -15,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -42,7 +42,7 @@ public class RegularOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
+    public OutcomesOverviewDto getOverview(final User user, final FilteringParametersDto filteringParameters) {
         return new OutcomesOverviewDto(List.of());
     }
 }

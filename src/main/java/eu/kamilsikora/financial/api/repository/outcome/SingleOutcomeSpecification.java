@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.repository.outcome;
 
-import eu.kamilsikora.financial.api.service.FilteringParameters;
+import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -8,14 +8,14 @@ import org.springframework.data.jpa.domain.Specification;
 @AllArgsConstructor
 public class SingleOutcomeSpecification<T extends SingleOutcome> {
 
-    private final FilteringParameters parameters;
+    private final FilteringParametersDto parameters;
 
     public Specification<T> buildOnParameters() {
         final Specification<T> spec = expenses()
                 .and(startDate())
                 .and(endDate())
                 .and(type());
-        if(parameters.getCategory() != null) {
+        if (parameters.getCategory() != null) {
             return spec.and(category());
         }
         return spec;

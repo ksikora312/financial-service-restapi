@@ -1,4 +1,4 @@
-package eu.kamilsikora.financial.api.service;
+package eu.kamilsikora.financial.api.dto;
 
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -11,22 +11,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
-public class FilteringParametersBuilder {
-    private final LocalDate startDate;
-    private final LocalDate endDate;
-    private final OutcomeType type;
-    private final Long categoryId;
-    private final User user;
+public class FilteringParametersDtoBuilder {
 
-    public FilteringParametersBuilder(LocalDate startDate, LocalDate endDate, OutcomeType type, Long categoryId, User user) {
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.type = type;
-        this.categoryId = categoryId;
-        this.user = user;
-    }
-
-    public FilteringParameters build() {
+    public static FilteringParametersDto build(User user, LocalDate startDate, LocalDate endDate, OutcomeType type, Long categoryId) {
         Category category = null;
         if (categoryId != null) {
             category = user.getCategories().stream()
@@ -37,7 +24,7 @@ public class FilteringParametersBuilder {
         final LocalDate start = startDate == null ? defaultStartDate() : startDate;
         final LocalDate end = endDate == null ? defaultEndDate() : endDate;
 
-        return FilteringParameters.builder()
+        return FilteringParametersDto.builder()
                 .category(category)
                 .expenses(expenses)
                 .startDate(start)
@@ -47,13 +34,13 @@ public class FilteringParametersBuilder {
                 .build();
     }
 
-    private LocalDate defaultStartDate() {
+    private static LocalDate defaultStartDate() {
         Instant now = Instant.now().truncatedTo(ChronoUnit.DAYS);
         Instant instantBeforeTimeFrame = now.minus(30, ChronoUnit.DAYS);
         return LocalDate.ofInstant(instantBeforeTimeFrame, ZoneId.systemDefault());
     }
 
-    private LocalDate defaultEndDate() {
+    private static LocalDate defaultEndDate() {
         Instant now = Instant.now();
         return LocalDate.ofInstant(now, ZoneId.systemDefault());
     }

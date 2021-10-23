@@ -1,6 +1,8 @@
 package eu.kamilsikora.financial.api.controller.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
+import eu.kamilsikora.financial.api.dto.FilteringParametersDtoBuilder;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
@@ -9,7 +11,9 @@ import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
+import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
+import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.service.outcome.ContinuityOutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeOverviewFactory;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
@@ -26,6 +30,7 @@ public class OutcomeControllerImpl implements OutcomeController {
     private final RegularOutcomeService regularOutcomeService;
     private final OutcomeService outcomeService;
     private final ContinuityOutcomeService continuityOutcomeService;
+    private final UserHelperService userHelperService;
     private final OutcomeOverviewFactory overviewFactory;
 
 
@@ -51,7 +56,9 @@ public class OutcomeControllerImpl implements OutcomeController {
 
     @Override
     public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
-        return overviewFactory.forType(type).getOverview(userPrincipal, type, startDate, endDate, category);
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final FilteringParametersDto parameters = FilteringParametersDtoBuilder.build(user, startDate, endDate, type, category);
+        return overviewFactory.forType(type).getOverview(user, parameters);
     }
 
     @Override

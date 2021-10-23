@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
@@ -16,8 +17,6 @@ import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeSpecification;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuitySingleOutcomeRepository;
-import eu.kamilsikora.financial.api.service.FilteringParameters;
-import eu.kamilsikora.financial.api.service.FilteringParametersBuilder;
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +24,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,9 +63,7 @@ public class ContinuityOutcomeService implements OverviewProvider {
 
     @Override
     @Transactional(readOnly = true)
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
-        final User user = userHelperService.getActiveUser(userPrincipal);
-        final FilteringParameters filteringParameters = new FilteringParametersBuilder(startDate, endDate, type, category, user).build();
+    public OutcomesOverviewDto getOverview(final User user, final FilteringParametersDto filteringParameters) {
         final Specification<ContinuityOutcome> specification = new ContinuityOutcomeSpecification(filteringParameters).buildOnParameters();
         final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findAll(specification);
         final List<OutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()
