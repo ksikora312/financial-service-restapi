@@ -78,6 +78,29 @@ public class ShoppingListService {
         return new ResponseShoppingListCollectionDto(shoppingListsDto);
     }
 
+    @Transactional(readOnly = true)
+    public ResponseShoppingListDto getListById(final UserPrincipal userPrincipal, final Long id) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList list = findListById(user.getShoppingLists(), id)
+                .orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        return listMapper.mapToDto(list);
+    }
+
+    @Transactional
+    public ResponseShoppingListDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.markShoppingListElementAs(elementId, done);
+        return listMapper.mapToDto(shoppingList);
+    }
+
+    @Transactional
+    public ResponseShoppingListDto markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.markShoppingListAsPrimary(listId);
+        return listMapper.mapToDto(shoppingList);
+    }
+
+
     private Optional<ShoppingList> findListById(final List<ShoppingList> shoppingLists, final Long id) {
         return shoppingLists.stream()
                 .filter(list -> list.getListId().equals(id))

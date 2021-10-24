@@ -42,7 +42,7 @@ public class TodoListService {
     @Transactional
     public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean finished) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final TodoList todoList = user.markElementAs(elementId, finished);
+        final TodoList todoList = user.markTodoListElementAs(elementId, finished);
         return listMapper.mapToDto(todoList);
     }
 
@@ -50,7 +50,7 @@ public class TodoListService {
     public ResponseTodoList createNewList(final UserPrincipal userPrincipal, final NewTodoList newTodoList) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList todoList = listMapper.mapToEntity(newTodoList, user);
-        user.addNewList(todoList);
+        user.addNewTodoList(todoList);
         todoListRepository.save(todoList);
         return listMapper.mapToDto(todoList);
     }
@@ -58,7 +58,7 @@ public class TodoListService {
     @Transactional
     public ResponseTodoList markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final TodoList todoList = user.markListAsPrimary(listId);
+        final TodoList todoList = user.markTodoListAsPrimary(listId);
         return listMapper.mapToDto(todoList);
     }
 

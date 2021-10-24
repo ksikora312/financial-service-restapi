@@ -26,8 +26,8 @@ public class TodoListControllerImpl implements TodoListController {
     }
 
     @Override
-    public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean finished) {
-        return todoListService.markElementAs(userPrincipal, elementId, finished);
+    public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+        return todoListService.markElementAs(userPrincipal, elementId, done);
     }
 
     @Override

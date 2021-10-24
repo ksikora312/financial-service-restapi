@@ -58,6 +58,40 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Category> categories;
 
+    public void addNewTodoList(final TodoList todoList) {
+        Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
+        if (primaryList.isEmpty()) {
+            todoList.setIsPrimary(true);
+        } else if (todoList.getIsPrimary()) {
+            todoLists.stream().filter(TodoList::getIsPrimary).findFirst().ifPresent(list -> list.setIsPrimary(false));
+        }
+        todoLists.add(todoList);
+    }
+
+    public TodoList markTodoListAsPrimary(final Long listId) {
+        TodoList todoList = todoLists.stream().filter(list -> list.getListId().equals(listId)).findFirst().orElseThrow(()
+                -> new ObjectDoesNotExistException("List does not exist!"));
+        todoLists.stream()
+                .filter(list -> list.getIsPrimary().equals(true))
+                .forEach(list -> list.setIsPrimary(false));
+        todoList.setIsPrimary(true);
+        return todoList;
+    }
+
+    public TodoList markTodoListElementAs(final Long elementId, final Boolean finished) {
+        final TodoList todoList = todoLists.stream()
+                .filter(list -> doesTodoListContainElement(list, elementId))
+                .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        todoList.getElements().stream().filter(element -> element.getElementId().equals(elementId))
+                .forEach(element -> element.setDone(finished));
+        return todoList;
+    }
+
+    private boolean doesTodoListContainElement(final TodoList todoList, final Long elementId) {
+        return todoList.getElements().stream()
+                .anyMatch(element -> element.getElementId().equals(elementId));
+    }
+
     public void addNewShoppingList(final ShoppingList shoppingList) {
         final Optional<ShoppingList> primary = shoppingLists.stream().filter(ShoppingList::getIsPrimary).findFirst();
         if(primary.isEmpty()) {
@@ -69,37 +103,33 @@ public class User {
         shoppingLists.add(shoppingList);
     }
 
-    public void addNewList(final TodoList todoList) {
-        Optional<TodoList> primaryList = todoLists.stream().filter(TodoList::getIsPrimary).findFirst();
-        if (primaryList.isEmpty()) {
-            todoList.setIsPrimary(true);
-        } else if (todoList.getIsPrimary()) {
-            todoLists.stream().filter(TodoList::getIsPrimary).findFirst().ifPresent(list -> list.setIsPrimary(false));
-        }
-        todoLists.add(todoList);
-    }
-
-    public TodoList markListAsPrimary(final Long listId) {
-        TodoList todoList = todoLists.stream().filter(list -> list.getListId().equals(listId)).findFirst().orElseThrow(()
-                -> new ObjectDoesNotExistException("List does not exist!"));
-        todoLists.stream()
-                .filter(list -> list.getIsPrimary().equals(true))
+    public ShoppingList markShoppingListAsPrimary(final Long id) {
+        final ShoppingList shoppingList = shoppingLists.stream()
+                .filter(list -> list.getListId().equals(id))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        shoppingLists.stream()
+                .filter(ShoppingList::getIsPrimary)
                 .forEach(list -> list.setIsPrimary(false));
-        todoList.setIsPrimary(true);
-        return todoList;
+        shoppingList.setIsPrimary(true);
+        return shoppingList;
     }
 
-    public TodoList markElementAs(final Long elementId, final Boolean finished) {
-        final TodoList todoList = todoLists.stream()
-                .filter(list -> doesListContainElement(list, elementId))
-                .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
-        todoList.getElements().stream().filter(element -> element.getElementId().equals(elementId))
-                .forEach(element -> element.setDone(finished));
-        return todoList;
+    public ShoppingList markShoppingListElementAs(final Long elementId, final Boolean done) {
+        final ShoppingList shoppingListContainingTheElement = shoppingLists.stream()
+                .filter(list -> doesShoppingListContainElement(list, elementId))
+                .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user lists!"));
+        shoppingListContainingTheElement.getElements().stream()
+                .filter(element -> element.getElementId().equals(elementId))
+                .forEach(element -> element.setDone(done));
+        final boolean allListElementsDone = shoppingListContainingTheElement.getElements().stream()
+                .filter(element -> !element.getDone())
+                .findAny().isEmpty();
+        shoppingListContainingTheElement.setDone(allListElementsDone);
+        return shoppingListContainingTheElement;
     }
 
-    private boolean doesListContainElement(final TodoList todoList, final Long elementId) {
-        return todoList.getElements().stream()
+    private boolean doesShoppingListContainElement(final ShoppingList list, final Long elementId) {
+        return list.getElements().stream()
                 .anyMatch(element -> element.getElementId().equals(elementId));
     }
 

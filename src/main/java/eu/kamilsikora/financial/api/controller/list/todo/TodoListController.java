@@ -30,7 +30,7 @@ public interface TodoListController {
 
     @PutMapping("/element/{id}/{state}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    ResponseTodoList markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean finished);
+    ResponseTodoList markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean done);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -44,7 +44,7 @@ public interface TodoListController {
     @ResponseStatus(HttpStatus.OK)
     ResponseTodoListCollection getAllLists(@AuthenticationPrincipal UserPrincipal userPrincipal);
 
-    @PostMapping("/primary/{id}")
+    @PutMapping("/primary/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseTodoList markAsPrimary(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
 }

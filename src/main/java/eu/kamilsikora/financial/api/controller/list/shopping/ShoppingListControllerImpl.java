@@ -34,4 +34,20 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal) {
         return shoppingListService.getAllLists(userPrincipal);
     }
+
+    @Override
+    public ResponseShoppingListDto getListAtId(final UserPrincipal userPrincipal, final Long listId) {
+        return shoppingListService.getListById(userPrincipal, listId);
+    }
+
+    @Override
+    public ResponseShoppingListDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+        return shoppingListService.markElementAs(userPrincipal, elementId, done);
+    }
+
+    @Override
+    public ResponseShoppingListDto markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
+        return shoppingListService.markAsPrimary(userPrincipal, listId);
+    }
 }
+
