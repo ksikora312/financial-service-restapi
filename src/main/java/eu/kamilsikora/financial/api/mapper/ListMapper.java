@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.mapper;
 
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
@@ -8,6 +9,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.entity.User;
+import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingListElement;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
@@ -45,6 +47,12 @@ public abstract class ListMapper {
         }
     }
 
+    @AfterMapping
+    protected void fillRestOdData(@MappingTarget ShoppingListElement shoppingListElement) {
+        shoppingListElement.setDone(false);
+        shoppingListElement.setAddedDate(LocalDateTime.now());
+    }
+
     @Mapping(target = "priority", expression = "java(Priority.of(newTodoListElement.getPriority()))")
     @Mapping(source = "newTodoListElement.name", target = "name")
     @Mapping(source = "todoList", target = "list")
@@ -57,11 +65,20 @@ public abstract class ListMapper {
 
     public abstract ResponseTodoList mapToDto(TodoList todoList);
 
+    @Mapping(target = "list", source = "shoppingList")
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "value", source = "newElement.value")
+    @Mapping(target = "name", source = "newElement.name")
+    public abstract ShoppingListElement mapToEntity(NewShoppingListElementDto newElement, ShoppingList shoppingList, Category category);
+
     @Mapping(target = "user", source = "user")
-    public abstract ShoppingList mapToEntity(NewShoppingListDto newShoppingList, User user);
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "name", source = "newShoppingList.name")
+    public abstract ShoppingList mapToEntity(NewShoppingListDto newShoppingList, User user, Category category);
 
     @Mapping(target = "category", expression = "java(shoppingListElement.getCategory() != null? shoppingListElement.getCategory().getName(): null)")
     public abstract ResponseShoppingListElementDto mapToDto(ShoppingListElement shoppingListElement);
 
+    @Mapping(target = "category", expression = "java(shoppingList.getCategory().getName())")
     public abstract ResponseShoppingListDto mapToDto(ShoppingList shoppingList);
 }

@@ -44,7 +44,7 @@ public class ShoppingList {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public ShoppingListElement addElement(ShoppingListElement newElement) {
+    public ShoppingListElement addElement(final ShoppingListElement newElement) {
         elements.add(newElement);
         return newElement;
     }

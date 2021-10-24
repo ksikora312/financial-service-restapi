@@ -88,7 +88,7 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    Category resolveAndIncrementUsage(final User user, final Long categoryId) {
+    public Category resolveAndIncrementUsage(final User user, final Long categoryId) {
         Category categoryToIncrement;
         if (categoryId == null) {
             categoryToIncrement = user.getCategories().stream()

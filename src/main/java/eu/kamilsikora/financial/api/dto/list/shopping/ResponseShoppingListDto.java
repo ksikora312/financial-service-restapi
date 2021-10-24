@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class ResponseShoppingListDto {
     private Long listId;
+    private String category;
     private String name;
     private List<ResponseShoppingListElementDto> elements;
     private Boolean isPrimary;
