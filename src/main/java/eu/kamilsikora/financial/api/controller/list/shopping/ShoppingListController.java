@@ -3,10 +3,12 @@ package eu.kamilsikora.financial.api.controller.list.shopping;
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,5 +25,12 @@ public interface ShoppingListController {
     @PostMapping("/element")
     @ResponseStatus(HttpStatus.CREATED)
     ResponseShoppingListDto addNewElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody NewShoppingListElementDto newShoppingListElementDto);
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    ResponseShoppingListDto getPrimaryList(@AuthenticationPrincipal UserPrincipal userPrincipal);
+
+    @GetMapping("/all")
+    ResponseShoppingListCollectionDto getAllLists(@AuthenticationPrincipal UserPrincipal userPrincipal);
 
 }

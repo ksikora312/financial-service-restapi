@@ -3,6 +3,7 @@ package eu.kamilsikora.financial.api.service.list.shopping;
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class ShoppingListService {
         return listMapper.mapToDto(shoppingList);
     }
 
+    @Transactional
     public ResponseShoppingListDto createNewElement(final UserPrincipal userPrincipal, final NewShoppingListElementDto newShoppingListElement) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final Long listId = newShoppingListElement.getListId();
@@ -55,6 +58,24 @@ public class ShoppingListService {
         shoppingList.addElement(element);
         shoppingListElementRepository.save(element);
         return listMapper.mapToDto(shoppingList);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseShoppingListDto getPrimaryList(final UserPrincipal userPrincipal) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.getShoppingLists().stream()
+                .filter(ShoppingList::getIsPrimary)
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        return listMapper.mapToDto(shoppingList);
+    }
+
+    @Transactional(readOnly = true)
+    public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final List<ResponseShoppingListDto> shoppingListsDto = user.getShoppingLists().stream()
+                .map(listMapper::mapToDto)
+                .collect(Collectors.toList());
+        return new ResponseShoppingListCollectionDto(shoppingListsDto);
     }
 
     private Optional<ShoppingList> findListById(final List<ShoppingList> shoppingLists, final Long id) {
