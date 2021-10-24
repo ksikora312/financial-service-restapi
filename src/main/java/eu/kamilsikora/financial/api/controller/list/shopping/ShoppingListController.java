@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @RequestMapping("/list/shopping")
@@ -34,7 +35,7 @@ public interface ShoppingListController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    ResponseShoppingListCollectionDto getAllLists(@AuthenticationPrincipal UserPrincipal userPrincipal);
+    ResponseShoppingListCollectionDto getAllLists(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam(required = false, defaultValue = "false") Boolean withDone);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

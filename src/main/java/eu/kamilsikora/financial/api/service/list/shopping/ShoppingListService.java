@@ -70,9 +70,10 @@ public class ShoppingListService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal) {
+    public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal, final Boolean withDone) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final List<ResponseShoppingListDto> shoppingListsDto = user.getShoppingLists().stream()
+                .filter(list -> !list.getDone() || withDone)
                 .map(listMapper::mapToDto)
                 .collect(Collectors.toList());
         return new ResponseShoppingListCollectionDto(shoppingListsDto);

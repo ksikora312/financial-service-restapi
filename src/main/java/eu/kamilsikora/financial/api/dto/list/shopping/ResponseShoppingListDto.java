@@ -11,6 +11,7 @@ public class ResponseShoppingListDto {
     private Long listId;
     private String category;
     private String name;
+    private Boolean done;
     private List<ResponseShoppingListElementDto> elements;
     private Boolean isPrimary;
 }

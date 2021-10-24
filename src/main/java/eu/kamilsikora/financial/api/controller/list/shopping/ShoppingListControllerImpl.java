@@ -31,8 +31,8 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     }
 
     @Override
-    public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal) {
-        return shoppingListService.getAllLists(userPrincipal);
+    public ResponseShoppingListCollectionDto getAllLists(final UserPrincipal userPrincipal, final Boolean withDone) {
+        return shoppingListService.getAllLists(userPrincipal, withDone);
     }
 
     @Override
