@@ -104,6 +104,17 @@ public class ShoppingListService {
     }
 
     @Transactional
+    public ResponseShoppingListDto updateListName(final UserPrincipal userPrincipal, final Long listId, final String newName) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = findListById(user.getShoppingLists(), listId)
+                .orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        shoppingList.setName(newName);
+        validator.validate(shoppingList);
+        shoppingListRepository.save(shoppingList);
+        return listMapper.mapToDto(shoppingList);
+    }
+
+    @Transactional
     public ResponseShoppingListDto updateElementDetails(final UserPrincipal userPrincipal,
                                                         final UpdateShoppingListElementDto updateElement) {
         final User user = userHelperService.getActiveUser(userPrincipal);

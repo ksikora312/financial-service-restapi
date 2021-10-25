@@ -40,6 +40,11 @@ public interface ShoppingListController {
                                               @PathVariable("id") Long elementId,
                                               @PathVariable("name") String elementName);
 
+    @PatchMapping("/{id}/{name}")
+    ResponseShoppingListDto updateListName(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                           @PathVariable("id") Long listId,
+                                           @PathVariable("name") String listName);
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     ResponseShoppingListDto getPrimaryList(@AuthenticationPrincipal UserPrincipal userPrincipal);
