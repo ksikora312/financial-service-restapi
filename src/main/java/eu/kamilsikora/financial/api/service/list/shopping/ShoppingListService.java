@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
@@ -20,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -101,6 +103,40 @@ public class ShoppingListService {
         return listMapper.mapToDto(shoppingList);
     }
 
+    @Transactional
+    public ResponseShoppingListDto updateElementDetails(final UserPrincipal userPrincipal,
+                                                        final UpdateShoppingListElementDto updateShoppingListElement) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList listContainingTheElement = findListContainingElement(user.getShoppingLists(), updateShoppingListElement.getElementId())
+                .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        final ShoppingListElement shoppingListElement = findElementInAllLists(user.getShoppingLists(), updateShoppingListElement.getElementId())
+                .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        final Category category = categoryService.resolveAndIncrementUsage(user, updateShoppingListElement.getCategoryId());
+        listMapper.mapIntoEntity(shoppingListElement, updateShoppingListElement, category);
+        validator.validate(shoppingListElement);
+        shoppingListElementRepository.save(shoppingListElement);
+        return listMapper.mapToDto(listContainingTheElement);
+    }
+
+    private Optional<ShoppingListElement> findElementInAllLists(final List<ShoppingList> shoppingLists, final long elementId) {
+        return findListContainingElement(shoppingLists, elementId)
+                .stream()
+                .map(ShoppingList::getElements)
+                .flatMap(Collection::stream)
+                .filter(element -> element.getElementId().equals(elementId))
+                .findFirst();
+    }
+
+    private Optional<ShoppingList> findListContainingElement(final List<ShoppingList> shoppingLists, final long elementId) {
+        return shoppingLists.stream()
+                .filter(list -> doesListContainElement(list, elementId))
+                .findFirst();
+    }
+
+    private boolean doesListContainElement(final ShoppingList shoppingList, final long elementId) {
+        return shoppingList.getElements().stream()
+                .anyMatch(element -> element.getElementId().equals(elementId));
+    }
 
     private Optional<ShoppingList> findListById(final List<ShoppingList> shoppingLists, final Long id) {
         return shoppingLists.stream()

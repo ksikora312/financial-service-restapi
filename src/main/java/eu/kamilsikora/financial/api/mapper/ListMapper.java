@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
@@ -16,9 +17,11 @@ import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
 import eu.kamilsikora.financial.api.entity.list.todo.Priority;
 import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.time.LocalDateTime;
 
@@ -81,4 +84,11 @@ public abstract class ListMapper {
 
     @Mapping(target = "category", expression = "java(shoppingList.getCategory().getName())")
     public abstract ResponseShoppingListDto mapToDto(ShoppingList shoppingList);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "value", source = "update.value")
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "elementId", ignore = true)
+    public abstract void mapIntoEntity(@MappingTarget ShoppingListElement shoppingListElement,
+                                                      UpdateShoppingListElementDto update, Category category);
 }

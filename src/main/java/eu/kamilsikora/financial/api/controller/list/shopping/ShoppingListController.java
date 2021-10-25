@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,6 +29,10 @@ public interface ShoppingListController {
     @PostMapping("/element")
     @ResponseStatus(HttpStatus.CREATED)
     ResponseShoppingListDto addNewElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody NewShoppingListElementDto newShoppingListElementDto);
+
+    @PutMapping("/element")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseShoppingListDto updateElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateShoppingListElementDto updateShoppingListElementDto);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

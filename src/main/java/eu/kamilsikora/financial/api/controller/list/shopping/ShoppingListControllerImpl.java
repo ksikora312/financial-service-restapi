@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.service.list.shopping.ShoppingListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,11 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     @Override
     public ResponseShoppingListDto addNewElement(final UserPrincipal userPrincipal, final NewShoppingListElementDto newShoppingListElementDto) {
         return shoppingListService.createNewElement(userPrincipal, newShoppingListElementDto);
+    }
+
+    @Override
+    public ResponseShoppingListDto updateElement(final UserPrincipal userPrincipal, final UpdateShoppingListElementDto updateShoppingListElementDto) {
+        return shoppingListService.updateElementDetails(userPrincipal, updateShoppingListElementDto);
     }
 
     @Override
