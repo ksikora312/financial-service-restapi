@@ -89,6 +89,7 @@ public abstract class ListMapper {
     @Mapping(target = "value", source = "update.value")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "elementId", ignore = true)
+    @Mapping(target = "name", ignore = true)
     public abstract void mapIntoEntity(@MappingTarget ShoppingListElement shoppingListElement,
                                                       UpdateShoppingListElementDto update, Category category);
 }

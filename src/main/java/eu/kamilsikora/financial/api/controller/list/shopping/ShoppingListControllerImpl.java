@@ -32,6 +32,11 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     }
 
     @Override
+    public ResponseShoppingListDto updateElementName(UserPrincipal userPrincipal, Long elementId, String elementName) {
+        return shoppingListService.updateElementName(userPrincipal, elementId, elementName);
+    }
+
+    @Override
     public ResponseShoppingListDto getPrimaryList(final UserPrincipal userPrincipal) {
         return shoppingListService.getPrimaryList(userPrincipal);
     }

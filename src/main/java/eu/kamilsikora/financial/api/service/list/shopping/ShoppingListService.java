@@ -105,14 +105,27 @@ public class ShoppingListService {
 
     @Transactional
     public ResponseShoppingListDto updateElementDetails(final UserPrincipal userPrincipal,
-                                                        final UpdateShoppingListElementDto updateShoppingListElement) {
+                                                        final UpdateShoppingListElementDto updateElement) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final ShoppingList listContainingTheElement = findListContainingElement(user.getShoppingLists(), updateShoppingListElement.getElementId())
+        final ShoppingList listContainingTheElement = findListContainingElement(user.getShoppingLists(), updateElement.getElementId())
                 .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
-        final ShoppingListElement shoppingListElement = findElementInAllLists(user.getShoppingLists(), updateShoppingListElement.getElementId())
+        final ShoppingListElement shoppingListElement = findElementInAllLists(user.getShoppingLists(), updateElement.getElementId())
                 .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
-        final Category category = categoryService.resolveAndIncrementUsage(user, updateShoppingListElement.getCategoryId());
-        listMapper.mapIntoEntity(shoppingListElement, updateShoppingListElement, category);
+        final Category category = categoryService.resolveAndIncrementUsage(user, updateElement.getCategoryId());
+        listMapper.mapIntoEntity(shoppingListElement, updateElement, category);
+        validator.validate(shoppingListElement);
+        shoppingListElementRepository.save(shoppingListElement);
+        return listMapper.mapToDto(listContainingTheElement);
+    }
+
+    @Transactional
+    public ResponseShoppingListDto updateElementName(final UserPrincipal userPrincipal, final Long id, final String newName) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList listContainingTheElement = findListContainingElement(user.getShoppingLists(), id)
+                .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        final ShoppingListElement shoppingListElement = findElementInAllLists(user.getShoppingLists(), id)
+                .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
+        shoppingListElement.setName(newName);
         validator.validate(shoppingListElement);
         shoppingListElementRepository.save(shoppingListElement);
         return listMapper.mapToDto(listContainingTheElement);

@@ -10,6 +10,7 @@ import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,6 +34,11 @@ public interface ShoppingListController {
     @PutMapping("/element")
     @ResponseStatus(HttpStatus.OK)
     ResponseShoppingListDto updateElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateShoppingListElementDto updateShoppingListElementDto);
+
+    @PatchMapping("/element/{id}/{name}")
+    ResponseShoppingListDto updateElementName(@AuthenticationPrincipal UserPrincipal userPrincipal,
+                                              @PathVariable("id") Long elementId,
+                                              @PathVariable("name") String elementName);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
