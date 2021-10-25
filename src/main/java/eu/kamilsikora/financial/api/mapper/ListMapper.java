@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
@@ -25,7 +26,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.time.LocalDateTime;
 
-@Mapper(componentModel = "spring", imports = Priority.class)
+@Mapper(componentModel = "spring", imports = {Priority.class, LocalDateTime.class})
 public abstract class ListMapper {
 
     @AfterMapping
@@ -39,21 +40,6 @@ public abstract class ListMapper {
         if(todoList.getIsPrimary() == null) {
             todoList.setIsPrimary(false);
         }
-    }
-
-    @AfterMapping
-    protected void fillRestOfData(@MappingTarget ShoppingList shoppingList) {
-        shoppingList.setDone(false);
-        shoppingList.setCreatedDate(LocalDateTime.now());
-        if(shoppingList.getIsPrimary() == null) {
-            shoppingList.setIsPrimary(false);
-        }
-    }
-
-    @AfterMapping
-    protected void fillRestOdData(@MappingTarget ShoppingListElement shoppingListElement) {
-        shoppingListElement.setDone(false);
-        shoppingListElement.setAddedDate(LocalDateTime.now());
     }
 
     @Mapping(target = "priority", expression = "java(Priority.of(newTodoListElement.getPriority()))")
@@ -72,11 +58,16 @@ public abstract class ListMapper {
     @Mapping(target = "category", source = "category")
     @Mapping(target = "value", source = "newElement.value")
     @Mapping(target = "name", source = "newElement.name")
+    @Mapping(target = "done", expression = "java(false)")
+    @Mapping(target = "addedDate", expression = "java(LocalDateTime.now())")
     public abstract ShoppingListElement mapToEntity(NewShoppingListElementDto newElement, ShoppingList shoppingList, Category category);
 
     @Mapping(target = "user", source = "user")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "name", source = "newShoppingList.name")
+    @Mapping(target = "done", expression = "java(false)")
+    @Mapping(target = "createdDate", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "isPrimary", expression = "java(newShoppingList.getIsPrimary() == null? false: newShoppingList.getIsPrimary())")
     public abstract ShoppingList mapToEntity(NewShoppingListDto newShoppingList, User user, Category category);
 
     @Mapping(target = "category", expression = "java(shoppingListElement.getCategory() != null? shoppingListElement.getCategory().getName(): null)")
@@ -92,4 +83,10 @@ public abstract class ListMapper {
     @Mapping(target = "name", ignore = true)
     public abstract void mapIntoEntity(@MappingTarget ShoppingListElement shoppingListElement,
                                                       UpdateShoppingListElementDto update, Category category);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "listId", ignore = true)
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "category", source = "category")
+    @Mapping(target = "value", source = "update.value")
+    public abstract void mapIntoEntity(@MappingTarget ShoppingList shoppingList, UpdateShoppingListDto update, Category category);
 }
