@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -100,6 +101,18 @@ public class ShoppingListService {
     public ResponseShoppingListDto markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final ShoppingList shoppingList = user.markShoppingListAsPrimary(listId);
+        return listMapper.mapToDto(shoppingList);
+    }
+
+    @Transactional
+    public ResponseShoppingListDto updateListDetails(final UserPrincipal userPrincipal, final UpdateShoppingListDto update) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = findListById(user.getShoppingLists(), update.getId())
+                .orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        final Category category = categoryService.resolveAndIncrementUsage(user, update.getCategoryId());
+        listMapper.mapIntoEntity(shoppingList, update, category);
+        validator.validate(shoppingList);
+        shoppingListRepository.save(shoppingList);
         return listMapper.mapToDto(shoppingList);
     }
 

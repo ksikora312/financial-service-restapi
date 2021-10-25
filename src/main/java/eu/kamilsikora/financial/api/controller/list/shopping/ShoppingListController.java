@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -36,11 +37,17 @@ public interface ShoppingListController {
     ResponseShoppingListDto updateElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateShoppingListElementDto updateShoppingListElementDto);
 
     @PatchMapping("/element/{id}/{name}")
+    @ResponseStatus(HttpStatus.OK)
     ResponseShoppingListDto updateElementName(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                               @PathVariable("id") Long elementId,
                                               @PathVariable("name") String elementName);
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    ResponseShoppingListDto updateList(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestBody UpdateShoppingListDto updateShoppingListDto);
+
     @PatchMapping("/{id}/{name}")
+    @ResponseStatus(HttpStatus.OK)
     ResponseShoppingListDto updateListName(@AuthenticationPrincipal UserPrincipal userPrincipal,
                                            @PathVariable("id") Long listId,
                                            @PathVariable("name") String listName);

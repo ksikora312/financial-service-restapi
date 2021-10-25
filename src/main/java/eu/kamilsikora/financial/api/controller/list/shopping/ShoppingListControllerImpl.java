@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.service.list.shopping.ShoppingListService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,11 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     @Override
     public ResponseShoppingListDto updateElementName(final UserPrincipal userPrincipal, final Long elementId, final String elementName) {
         return shoppingListService.updateElementName(userPrincipal, elementId, elementName);
+    }
+
+    @Override
+    public ResponseShoppingListDto updateList(UserPrincipal userPrincipal, UpdateShoppingListDto updateShoppingListDto) {
+        return shoppingListService.updateListDetails(userPrincipal, updateShoppingListDto);
     }
 
     @Override
