@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.service.list.todo.TodoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class TodoListControllerImpl implements TodoListController {
     }
 
     @Override
-    public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+    public ResponseTodoListElement markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
         return todoListService.markElementAs(userPrincipal, elementId, done);
     }
 

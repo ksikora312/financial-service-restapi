@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.controller.auth;
 
 import eu.kamilsikora.financial.api.configuration.auth.LoginCredentials;
+import eu.kamilsikora.financial.api.dto.CheckResponseDto;
 import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -27,4 +28,11 @@ public interface AuthController {
     @ResponseStatus(HttpStatus.OK)
     String activateAccount(@PathVariable("token") final String token);
 
+    @GetMapping("/exists/username/{username}")
+    @ResponseStatus(HttpStatus.OK)
+    CheckResponseDto isUsernameTaken(@PathVariable("username") final String username);
+
+    @GetMapping("/exists/email/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    CheckResponseDto isEmailTaken(@PathVariable("email") final String email);
 }

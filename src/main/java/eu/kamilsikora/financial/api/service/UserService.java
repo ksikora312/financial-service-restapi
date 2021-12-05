@@ -30,4 +30,14 @@ public class UserService {
         emailService.sendAccountActivationEmail(activationToken);
     }
 
+    @Transactional(readOnly = true)
+    public boolean isUsernameTaken(final String username) {
+        return userRepository.findByUsername(username).isPresent();
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isEmailTaken(final String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
 }

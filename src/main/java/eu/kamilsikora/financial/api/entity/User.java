@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
+import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.validation.UniqueUsernameAndEmail;
 import lombok.Getter;
@@ -78,13 +79,19 @@ public class User {
         return todoList;
     }
 
-    public TodoList markTodoListElementAs(final Long elementId, final Boolean finished) {
+    public TodoListElement markTodoListElementAs(final Long elementId, final Boolean finished) {
         final TodoList todoList = todoLists.stream()
                 .filter(list -> doesTodoListContainElement(list, elementId))
                 .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
-        todoList.getElements().stream().filter(element -> element.getElementId().equals(elementId))
-                .forEach(element -> element.setDone(finished));
-        return todoList;
+        final TodoListElement element = getTodoElementById(elementId, todoList);
+        element.setDone(finished);
+        return element;
+    }
+
+    private TodoListElement getTodoElementById(final Long elementId, final TodoList todoList) {
+        return todoList.getElements().stream()
+                .filter(e -> e.getElementId().equals(elementId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("Elements does not exist!"));
     }
 
     private boolean doesTodoListContainElement(final TodoList todoList, final Long elementId) {

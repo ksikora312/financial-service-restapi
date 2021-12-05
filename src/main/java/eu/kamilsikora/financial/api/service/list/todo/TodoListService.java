@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
@@ -40,10 +41,11 @@ public class TodoListService {
     }
 
     @Transactional
-    public ResponseTodoList markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean finished) {
+    public ResponseTodoListElement markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean finished) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final TodoList todoList = user.markTodoListElementAs(elementId, finished);
-        return listMapper.mapToDto(todoList);
+        final TodoListElement todoListElement = user.markTodoListElementAs(elementId, finished);
+
+        return listMapper.mapToDto(todoListElement);
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,7 +31,7 @@ public interface TodoListController {
 
     @PutMapping("/element/{id}/{state}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    ResponseTodoList markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean done);
+    ResponseTodoListElement markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean done);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

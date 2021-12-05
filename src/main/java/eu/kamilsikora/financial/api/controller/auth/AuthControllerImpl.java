@@ -1,6 +1,7 @@
 package eu.kamilsikora.financial.api.controller.auth;
 
 import eu.kamilsikora.financial.api.configuration.auth.LoginCredentials;
+import eu.kamilsikora.financial.api.dto.CheckResponseDto;
 import eu.kamilsikora.financial.api.dto.auth.RegistrationDto;
 import eu.kamilsikora.financial.api.service.TokenService;
 import eu.kamilsikora.financial.api.service.UserService;
@@ -26,4 +27,15 @@ public class AuthControllerImpl implements AuthController {
         return "Account activated successfully!";
     }
 
+    @Override
+    public CheckResponseDto isUsernameTaken(final String username) {
+        final boolean isTaken = userService.isUsernameTaken(username);
+        return new CheckResponseDto(!isTaken);
+    }
+
+    @Override
+    public CheckResponseDto isEmailTaken(final String email) {
+        final boolean isTaken = userService.isEmailTaken(email);
+        return new CheckResponseDto(!isTaken);
+    }
 }
