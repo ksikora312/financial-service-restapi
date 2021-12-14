@@ -10,6 +10,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListOverview;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
@@ -25,6 +26,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Mapper(componentModel = "spring", imports = {Priority.class, LocalDateTime.class})
 public abstract class ListMapper {
@@ -90,4 +92,9 @@ public abstract class ListMapper {
     @Mapping(target = "value", source = "update.value")
     @Mapping(target = "user", ignore = true)
     public abstract void mapIntoEntity(@MappingTarget ShoppingList shoppingList, UpdateShoppingListDto update, Category category);
+
+    @Mapping(target = "listId", source = "todoList.listId")
+    public abstract ResponseTodoListOverview mapToOverview(TodoList todoList);
+
+    public abstract List<ResponseTodoListOverview> mapToOverview(List<TodoList> todoLists);
 }

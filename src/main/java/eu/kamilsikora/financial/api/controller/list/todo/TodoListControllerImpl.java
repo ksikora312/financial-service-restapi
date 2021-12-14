@@ -5,6 +5,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
+import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.service.list.todo.TodoListService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ public class TodoListControllerImpl implements TodoListController {
     }
 
     @Override
+    public ResponseTodoList changeListName(UserPrincipal userPrincipal, Long listId, String listName) {
+        return todoListService.changeListName(userPrincipal, listId, listName);
+    }
+
+    @Override
     public ResponseTodoListElement markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
         return todoListService.markElementAs(userPrincipal, elementId, done);
     }
@@ -34,6 +40,11 @@ public class TodoListControllerImpl implements TodoListController {
     @Override
     public ResponseTodoList getPrimaryList(final UserPrincipal userPrincipal) {
         return todoListService.getPrimaryList(userPrincipal);
+    }
+
+    @Override
+    public ResponseTodoListCollectionOverview getListsOverview(UserPrincipal userPrincipal) {
+        return todoListService.getListsOverview(userPrincipal);
     }
 
     @Override

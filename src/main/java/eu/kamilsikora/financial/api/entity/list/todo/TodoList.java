@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class TodoList {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "todo_list_seq")
     private Long listId;
     private String name;
-    @OneToMany(mappedBy = "list")
+    @OneToMany(mappedBy = "list", fetch = FetchType.LAZY)
     private List<TodoListElement> elements;
     private Boolean isPrimary;
 
