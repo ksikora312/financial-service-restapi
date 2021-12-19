@@ -86,6 +86,7 @@ public class TodoListService {
         return new ResponseTodoListCollectionOverview(overviews);
     }
 
+    @Transactional(readOnly = true)
     public ResponseTodoList getPrimaryList(final UserPrincipal userPrincipal) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList primaryList = user.getTodoLists().stream()
@@ -94,6 +95,7 @@ public class TodoListService {
         return listMapper.mapToDto(primaryList);
     }
 
+    @Transactional(readOnly = true)
     public ResponseTodoList getListAtId(final UserPrincipal userPrincipal, final Long listId) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final TodoList list = user.getTodoLists().stream()
@@ -102,6 +104,7 @@ public class TodoListService {
         return listMapper.mapToDto(list);
     }
 
+    @Transactional(readOnly = true)
     public ResponseTodoListCollection getTodoLists(final UserPrincipal userPrincipal) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final List<TodoList> userLists = user.getTodoLists();
@@ -110,5 +113,34 @@ public class TodoListService {
                 .collect(Collectors.toList());
         return new ResponseTodoListCollection(responseLists);
     }
+
+    @Transactional
+    public void deleteList(final UserPrincipal userPrincipal, final Long listId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList todoList = user.getTodoLists().stream()
+                .filter(list -> list.getListId().equals(listId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        todoListElementRepository.deleteAll(todoList.getElements());
+        todoListRepository.delete(todoList);
+        user.getTodoLists().remove(todoList);
+    }
+
+    public ResponseTodoList deleteListElement(final UserPrincipal userPrincipal, final Long elementId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final TodoList todoList = user.getTodoLists().stream().filter(list -> doesListContainElement(list, elementId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("Elements does not belong to any of user's lists"));
+        final TodoListElement todoElement = todoList.getElements().stream()
+                .filter(element -> element.getElementId().equals(elementId))
+                .findFirst().get();
+        todoList.getElements().remove(todoElement);
+       todoListElementRepository.delete(todoElement);
+       return listMapper.mapToDto(todoList);
+    }
+
+    private boolean doesListContainElement(final TodoList todoList, final long elementId) {
+        return todoList.getElements().stream()
+                .anyMatch(element -> element.getElementId().equals(elementId));
+    }
+
 
 }

@@ -61,4 +61,14 @@ public class TodoListControllerImpl implements TodoListController {
     public ResponseTodoList markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
         return todoListService.markAsPrimary(userPrincipal, listId);
     }
+
+    @Override
+    public void deleteList(UserPrincipal userPrincipal, Long listId) {
+        todoListService.deleteList(userPrincipal, listId);
+    }
+
+    @Override
+    public ResponseTodoList deleteListElement(UserPrincipal userPrincipal, Long elementId) {
+        return todoListService.deleteListElement(userPrincipal, elementId);
+    }
 }

@@ -10,6 +10,7 @@ import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,4 +61,12 @@ public interface TodoListController {
     @PutMapping("/primary/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseTodoList markAsPrimary(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void deleteList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
+
+    @DeleteMapping("/element/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseTodoList deleteListElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId);
 }
