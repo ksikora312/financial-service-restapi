@@ -55,6 +55,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "expenses", source = "user.expenses")
     @Mapping(source = "category", target = "category")
     @Mapping(target = "name", source = "newOutcomeDto.name")
+    @Mapping(target = "id", ignore = true)
     public abstract RegularSingleOutcome mapToEntity(NewOutcomeDto newOutcomeDto, User user, Category category);
 
     @Mapping(target = "outcomeType", expression = "java(singleOutcome.getOutcomeType().toString())")

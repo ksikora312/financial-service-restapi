@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@RequestMapping("/outcome/category/")
+@RequestMapping("/outcome/category")
 @Api(tags = {"Category controller"})
 public interface CategoryController {
     @PostMapping("/{category}")
