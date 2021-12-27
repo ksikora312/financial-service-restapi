@@ -66,6 +66,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "user", source = "user")
     @Mapping(target = "category", source = "category")
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "name", source = "newContinuityOutcomeDto.name")
     public abstract ContinuityOutcome mapToEntity(NewContinuityOutcomeDto newContinuityOutcomeDto, User user, Category category);
 
     @Mapping(target = "expenses", source = "expenses")
