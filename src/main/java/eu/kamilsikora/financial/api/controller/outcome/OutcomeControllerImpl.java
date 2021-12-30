@@ -7,17 +7,17 @@ import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
-import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.service.outcome.ContinuityOutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeOverviewFactory;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
-import eu.kamilsikora.financial.api.service.outcome.RegularOutcomeService;
+import eu.kamilsikora.financial.api.service.outcome.SingleOutcomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +27,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class OutcomeControllerImpl implements OutcomeController {
 
-    private final RegularOutcomeService regularOutcomeService;
+    private final SingleOutcomeService singleOutcomeService;
     private final OutcomeService outcomeService;
     private final ContinuityOutcomeService continuityOutcomeService;
     private final UserHelperService userHelperService;
@@ -36,7 +36,7 @@ public class OutcomeControllerImpl implements OutcomeController {
 
     @Override
     public void addRegularOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
-        regularOutcomeService.addNewOutcome(userPrincipal, newOutcomeDto);
+        singleOutcomeService.addNewOutcome(userPrincipal, newOutcomeDto);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OutcomeType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
+    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OverviewType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final FilteringParametersDto parameters = FilteringParametersDtoBuilder.build(user, startDate, endDate, type, category);
         return overviewFactory.forType(type).getOverview(user, parameters);

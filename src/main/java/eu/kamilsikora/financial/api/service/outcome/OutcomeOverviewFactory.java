@@ -1,6 +1,6 @@
 package eu.kamilsikora.financial.api.service.outcome;
 
-import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -9,9 +9,9 @@ import java.util.List;
 public class OutcomeOverviewFactory {
     private final List<OverviewProvider> overviewProviders;
 
-    public OverviewProvider forType(OutcomeType outcomeType) {
-        for(final OverviewProvider overviewProvider: overviewProviders) {
-            if(overviewProvider.canHandle(outcomeType))
+    public OverviewProvider forType(OverviewType overviewType) {
+        for (final OverviewProvider overviewProvider : overviewProviders) {
+            if (overviewProvider.canHandle(overviewType))
                 return overviewProvider;
         }
         throw new IllegalArgumentException("Provider for given type does not exist!");

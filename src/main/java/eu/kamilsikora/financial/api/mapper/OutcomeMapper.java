@@ -90,7 +90,13 @@ public abstract class OutcomeMapper {
 
     @Mapping(target = "type", expression = "java(OutcomeType.CONTINUOUS_OUTCOME.name().replace('_', ' '))")
     @Mapping(target = "date", expression = "java(continuityOutcome.getLastUsage().toLocalDate().toString())")
+    @Mapping(target = "category", expression = "java(continuityOutcome.getCategory().getName())")
     public abstract OutcomeOverviewDto mapToOverviewDto(ContinuityOutcome continuityOutcome);
+
+    @Mapping(target = "type", expression = "java(OutcomeType.REGULAR_OUTCOME.name().replace('_', ' '))")
+    @Mapping(target = "date", expression = "java(outcome.getDate().toString())")
+    @Mapping(target = "category", expression = "java(outcome.getCategory().getName())")
+    public abstract OutcomeOverviewDto mapToOverviewDto(SingleOutcome outcome);
 
     @Mapping(target = "outcomeType", expression = "java(continuitySingleOutcome.getOutcomeType().toString())")
     @Mapping(target = "date", dateFormat = "dd.MM.yyyy")

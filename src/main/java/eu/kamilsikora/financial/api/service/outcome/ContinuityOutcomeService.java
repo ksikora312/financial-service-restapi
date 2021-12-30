@@ -4,6 +4,7 @@ import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
@@ -81,7 +82,7 @@ public class ContinuityOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public boolean canHandle(OutcomeType outcomeType) {
-        return outcomeType == OutcomeType.CONTINUOUS_OUTCOME;
+    public boolean canHandle(OverviewType overviewType) {
+        return overviewType == OverviewType.CONTINUITY_OUTCOME;
     }
 }

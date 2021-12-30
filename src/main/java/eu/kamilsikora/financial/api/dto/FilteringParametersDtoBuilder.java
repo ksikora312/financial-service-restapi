@@ -1,9 +1,9 @@
 package eu.kamilsikora.financial.api.dto;
 
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.Expenses;
-import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 
 import java.time.Instant;
@@ -13,7 +13,7 @@ import java.time.temporal.ChronoUnit;
 
 public class FilteringParametersDtoBuilder {
 
-    public static FilteringParametersDto build(User user, LocalDate startDate, LocalDate endDate, OutcomeType type, Long categoryId) {
+    public static FilteringParametersDto build(User user, LocalDate startDate, LocalDate endDate, OverviewType type, Long categoryId) {
         Category category = null;
         if (categoryId != null) {
             category = user.getCategories().stream()

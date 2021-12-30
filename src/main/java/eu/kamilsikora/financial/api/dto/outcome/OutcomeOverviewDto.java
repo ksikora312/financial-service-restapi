@@ -11,5 +11,5 @@ public class OutcomeOverviewDto {
     private Double value;
     private String type;
     private String date;
-    // TODO: category?
+    private String category;
 }

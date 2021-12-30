@@ -1,6 +1,8 @@
 package eu.kamilsikora.financial.api.repository.outcome;
 
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
+import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -11,12 +13,14 @@ public class SingleOutcomeSpecification<T extends SingleOutcome> {
     private final FilteringParametersDto parameters;
 
     public Specification<T> buildOnParameters() {
-        final Specification<T> spec = expenses()
+        Specification<T> spec = expenses()
                 .and(startDate())
-                .and(endDate())
-                .and(type());
+                .and(endDate());
         if (parameters.getCategory() != null) {
-            return spec.and(category());
+            spec = spec.and(category());
+        }
+        if(parameters.getType() != OverviewType.ALL) {
+            spec = spec.and(type());
         }
         return spec;
     }
@@ -34,11 +38,19 @@ public class SingleOutcomeSpecification<T extends SingleOutcome> {
     }
 
     private Specification<T> type() {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("outcomeType"), parameters.getType());
+        OutcomeType type = OutcomeType.REGULAR_OUTCOME;
+        switch(parameters.getType()) {
+            case CONTINUITY_SINGLE_OUTCOME:
+                type = OutcomeType.CONTINUOUS_OUTCOME;
+                break;
+            case SHOPPING_LIST_SINGLE_OUTCOME:
+                type = OutcomeType.SHOPPING_LIST_OUTCOME;
+        }
+        OutcomeType finalType = type;
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("outcomeType"), finalType);
     }
 
     private Specification<T> category() {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("category"), parameters.getCategory());
     }
-
 }

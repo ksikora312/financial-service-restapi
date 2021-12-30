@@ -5,11 +5,11 @@ import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
+import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.UpdateContinuityOutcomeDto;
-import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import io.swagger.annotations.Api;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -47,7 +47,7 @@ public interface OutcomeController {
 
     @GetMapping("/overview")
     @ResponseStatus(HttpStatus.OK)
-    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OutcomeType type,
+    OutcomesOverviewDto getOverview(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OverviewType type,
                                     @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
                                     @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate,
                                     @RequestParam(required = false) Long category);
