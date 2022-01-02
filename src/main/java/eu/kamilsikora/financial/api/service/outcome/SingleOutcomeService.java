@@ -2,9 +2,9 @@ package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
+import eu.kamilsikora.financial.api.dto.PageDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -17,12 +17,13 @@ import eu.kamilsikora.financial.api.repository.outcome.SingleOutcomeSpecificatio
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,13 +53,11 @@ public class SingleOutcomeService implements OverviewProvider {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final User user, final FilteringParametersDto filteringParameters) {
+    public Page<OutcomeOverviewDto> getOverview(final User user, final PageDto page, final FilteringParametersDto filteringParameters) {
         final Specification<SingleOutcome> specification =
-                new SingleOutcomeSpecification<SingleOutcome>(filteringParameters).buildOnParameters();
-        final List<SingleOutcome> singleOutcomes = singleOutcomeRepository.findAll(specification);
-        final List<OutcomeOverviewDto> dtos = singleOutcomes.stream()
-                .map(outcomeMapper::mapToOverviewDto)
-                .collect(Collectors.toList());
-        return new OutcomesOverviewDto(dtos);
+                new SingleOutcomeSpecification<>(filteringParameters).buildOnParameters();
+        final Pageable pageable = PageRequest.of(page.getPageNumber(), page.getPageSize(), Sort.by("date").descending().and(Sort.by("value").descending()));
+        Page<SingleOutcome> outcomesPage = singleOutcomeRepository.findAll(specification, pageable);
+        return outcomesPage.map(outcomeMapper::mapToOverviewDto);
     }
 }

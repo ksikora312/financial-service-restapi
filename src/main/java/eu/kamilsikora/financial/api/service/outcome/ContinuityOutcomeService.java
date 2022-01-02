@@ -2,8 +2,8 @@ package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
+import eu.kamilsikora.financial.api.dto.PageDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.NewContinuityOutcomeDto;
@@ -12,7 +12,6 @@ import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
-import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
@@ -21,12 +20,13 @@ import eu.kamilsikora.financial.api.repository.outcome.ContinuitySingleOutcomeRe
 import eu.kamilsikora.financial.api.service.UserHelperService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,13 +64,11 @@ public class ContinuityOutcomeService implements OverviewProvider {
 
     @Override
     @Transactional(readOnly = true)
-    public OutcomesOverviewDto getOverview(final User user, final FilteringParametersDto filteringParameters) {
+    public Page<OutcomeOverviewDto> getOverview(final User user, final PageDto page, final FilteringParametersDto filteringParameters) {
         final Specification<ContinuityOutcome> specification = new ContinuityOutcomeSpecification(filteringParameters).buildOnParameters();
-        final List<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findAll(specification);
-        final List<OutcomeOverviewDto> continuityOutcomesDto = continuityOutcomes.stream()
-                .map(outcomeMapper::mapToOverviewDto)
-                .collect(Collectors.toList());
-        return new OutcomesOverviewDto(continuityOutcomesDto);
+        final Pageable pageable = PageRequest.of(page.getPageNumber(), page.getPageSize(), Sort.by("lastUsage").descending().and(Sort.by("value").descending()));
+        final Page<ContinuityOutcome> continuityOutcomes = continuityOutcomeRepository.findAll(specification, pageable);
+        return continuityOutcomes.map(outcomeMapper::mapToOverviewDto);
     }
 
     @Transactional(readOnly = true)

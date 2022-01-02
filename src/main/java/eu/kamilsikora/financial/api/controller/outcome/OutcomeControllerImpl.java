@@ -3,10 +3,11 @@ package eu.kamilsikora.financial.api.controller.outcome;
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.dto.FilteringParametersDtoBuilder;
+import eu.kamilsikora.financial.api.dto.PageDto;
 import eu.kamilsikora.financial.api.dto.outcome.NewOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
+import eu.kamilsikora.financial.api.dto.outcome.OutcomeOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomesOverviewDto;
 import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.dto.outcome.continuity.ContinuityOutcomeDetailsDto;
@@ -19,6 +20,7 @@ import eu.kamilsikora.financial.api.service.outcome.OutcomeOverviewFactory;
 import eu.kamilsikora.financial.api.service.outcome.OutcomeService;
 import eu.kamilsikora.financial.api.service.outcome.SingleOutcomeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
@@ -55,10 +57,13 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public OutcomesOverviewDto getOverview(final UserPrincipal userPrincipal, final OverviewType type, final LocalDate startDate, final LocalDate endDate, final Long category) {
+    public Page<OutcomeOverviewDto> getOverview(final UserPrincipal userPrincipal, final OverviewType type,
+                                                final Integer pageNumber, final Integer pageSize,
+                                                final LocalDate startDate, final LocalDate endDate, final Long category) {
         final User user = userHelperService.getActiveUser(userPrincipal);
+        final PageDto page = new PageDto(pageNumber, pageSize);
         final FilteringParametersDto parameters = FilteringParametersDtoBuilder.build(user, startDate, endDate, type, category);
-        return overviewFactory.forType(type).getOverview(user, parameters);
+        return overviewFactory.forType(type).getOverview(user, page, parameters);
     }
 
     @Override
