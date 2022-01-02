@@ -10,14 +10,14 @@ import java.util.List;
 public class CategorySummaryDto {
     private String category;
     private Double moneySpent;
-    private List<OutcomeDetailsDto> outcomes;
+    private List<Double> values;
+    private List<Integer> outcomes;
 
-    CategorySummaryDto(final List<OutcomeDetailsDto> outcomes) {
+    public CategorySummaryDto(final String category, final List<Double> values, final List<Integer> outcomes) {
+        this.category = category;
+        this.values = values;
         this.outcomes = outcomes;
-        this.moneySpent = this.outcomes.stream()
-                .mapToDouble(OutcomeDetailsDto::getValue)
-                .sum();
-        this.category = outcomes.get(0).getCategory();
+        this.moneySpent = values.stream().mapToDouble(Double::valueOf).sum();
     }
 
 }

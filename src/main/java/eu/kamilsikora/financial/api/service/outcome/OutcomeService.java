@@ -28,15 +28,6 @@ public class OutcomeService {
     private final ExceptionThrowingValidator validator;
     private final OutcomeMapper outcomeMapper;
 
-    @Transactional(readOnly = true)
-    public OutcomeSummaryDto getSummaryOfAllOutcomes(final UserPrincipal userPrincipal) {
-        final User user = userHelperService.getActiveUser(userPrincipal);
-        final List<SingleOutcome> allOutcomes = user.getExpenses().getOutcomes();
-        final List<OutcomeDetailsDto> allOutcomesDto = allOutcomes.stream()
-                .map(outcomeMapper::mapToDto)
-                .collect(Collectors.toList());
-        return new OutcomeSummaryDto(allOutcomesDto);
-    }
 
     @Transactional
     public OutcomeDetailsDto updateOutcome(final UserPrincipal userPrincipal, final UpdateOutcomeDto updateOutcomeDto) {

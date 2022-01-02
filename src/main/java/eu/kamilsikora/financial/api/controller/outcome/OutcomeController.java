@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDate;
 
-@RequestMapping("/outcome/")
+@RequestMapping("/outcome")
 @Api(tags = {"Outcome controller"})
 public interface OutcomeController {
 
@@ -60,5 +60,8 @@ public interface OutcomeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    OutcomeSummaryDto getOutcomesSummary(@AuthenticationPrincipal UserPrincipal userPrincipal);
+    OutcomeSummaryDto getOutcomesSummary(@AuthenticationPrincipal UserPrincipal userPrincipal, @RequestParam OverviewType type,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
+                                         @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate,
+                                         @RequestParam(required = false) Long category);
 }

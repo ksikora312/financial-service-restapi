@@ -72,7 +72,9 @@ public class OutcomeControllerImpl implements OutcomeController {
     }
 
     @Override
-    public OutcomeSummaryDto getOutcomesSummary(final UserPrincipal userPrincipal) {
-        return outcomeService.getSummaryOfAllOutcomes(userPrincipal);
+    public OutcomeSummaryDto getOutcomesSummary(UserPrincipal userPrincipal, OverviewType type, LocalDate startDate, LocalDate endDate, Long category) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final FilteringParametersDto parameters = FilteringParametersDtoBuilder.build(user, startDate, endDate, type, category);
+        return singleOutcomeService.provideSummary(user, parameters);
     }
 }
