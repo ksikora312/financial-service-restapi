@@ -1,15 +1,18 @@
 package eu.kamilsikora.financial.api.controller.list.shopping;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.list.ResponseListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,9 +69,21 @@ public interface ShoppingListController {
 
     @PutMapping("/element/{id}/{state}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    ResponseShoppingListDto markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean done);
+    ResponseShoppingListElementDto markElementAs(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId, @PathVariable("state") Boolean done);
 
     @PutMapping("/primary/{id}")
     @ResponseStatus(HttpStatus.OK)
     ResponseShoppingListDto markAsPrimary(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
+
+    @GetMapping("/overview")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseListCollectionOverview getListsOverview(@AuthenticationPrincipal UserPrincipal userPrincipal);
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    void deleteList(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long listId);
+
+    @DeleteMapping("/element/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    ResponseShoppingListDto deleteListElement(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long elementId);
 }

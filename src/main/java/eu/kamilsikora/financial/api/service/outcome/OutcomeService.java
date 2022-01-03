@@ -2,7 +2,6 @@ package eu.kamilsikora.financial.api.service.outcome;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
 import eu.kamilsikora.financial.api.dto.outcome.OutcomeDetailsDto;
-import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.UpdateOutcomeDto;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
@@ -15,9 +14,6 @@ import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

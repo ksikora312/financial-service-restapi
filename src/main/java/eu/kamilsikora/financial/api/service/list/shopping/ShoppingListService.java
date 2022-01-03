@@ -1,10 +1,13 @@
 package eu.kamilsikora.financial.api.service.list.shopping;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.list.ResponseListCollectionOverview;
+import eu.kamilsikora.financial.api.dto.list.ResponseListOverview;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.entity.User;
@@ -91,10 +94,11 @@ public class ShoppingListService {
     }
 
     @Transactional
-    public ResponseShoppingListDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+    public ResponseShoppingListElementDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final ShoppingList shoppingList = user.markShoppingListElementAs(elementId, done);
-        return listMapper.mapToDto(shoppingList);
+        final ShoppingListElement element = user.markShoppingListElementAs(elementId, done);
+
+        return listMapper.mapToDto(element);
     }
 
     @Transactional
@@ -153,6 +157,39 @@ public class ShoppingListService {
         validator.validate(shoppingListElement);
         shoppingListElementRepository.save(shoppingListElement);
         return listMapper.mapToDto(listContainingTheElement);
+    }
+
+    @Transactional
+    public ResponseListCollectionOverview getOverviews(final UserPrincipal userPrincipal) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final List<ShoppingList> shoppingLists = user.getShoppingLists();
+
+        final List<ResponseListOverview> overviews = listMapper.mapShoppingListsToOverview(shoppingLists);
+        return new ResponseListCollectionOverview(overviews);
+    }
+
+    @Transactional
+    public void deleteList(final UserPrincipal userPrincipal, final Long listId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.getShoppingLists().stream()
+                .filter(list -> list.getListId().equals(listId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        shoppingListElementRepository.deleteAll(shoppingList.getElements());
+        shoppingListRepository.delete(shoppingList);
+        user.getShoppingLists().remove(shoppingList);
+    }
+
+    @Transactional
+    public ResponseShoppingListDto deleteListElement(final UserPrincipal userPrincipal, final Long elementId) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.getShoppingLists().stream().filter(list -> doesListContainElement(list, elementId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("Elements does not belong to any of user's lists"));
+        final ShoppingListElement shoppingElement = shoppingList.getElements().stream()
+                .filter(element -> element.getElementId().equals(elementId))
+                .findFirst().get();
+        shoppingList.getElements().remove(shoppingElement);
+        shoppingListElementRepository.delete(shoppingElement);
+        return listMapper.mapToDto(shoppingList);
     }
 
     private Optional<ShoppingListElement> findElementInAllLists(final List<ShoppingList> shoppingLists, final long elementId) {

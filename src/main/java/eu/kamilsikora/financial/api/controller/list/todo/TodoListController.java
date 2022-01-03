@@ -1,11 +1,11 @@
 package eu.kamilsikora.financial.api.controller.list.todo;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.list.ResponseListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
-import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
@@ -48,7 +48,7 @@ public interface TodoListController {
 
     @GetMapping("/overview")
     @ResponseStatus(HttpStatus.OK)
-    ResponseTodoListCollectionOverview getListsOverview(@AuthenticationPrincipal UserPrincipal userPrincipal);
+    ResponseListCollectionOverview getListsOverview(@AuthenticationPrincipal UserPrincipal userPrincipal);
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)

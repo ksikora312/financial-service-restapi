@@ -3,6 +3,7 @@ package eu.kamilsikora.financial.api.entity;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
+import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingListElement;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
@@ -121,18 +122,23 @@ public class User {
         return shoppingList;
     }
 
-    public ShoppingList markShoppingListElementAs(final Long elementId, final Boolean done) {
+    public ShoppingListElement markShoppingListElementAs(final Long elementId, final Boolean done) {
         final ShoppingList shoppingListContainingTheElement = shoppingLists.stream()
                 .filter(list -> doesShoppingListContainElement(list, elementId))
                 .findAny().orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user lists!"));
-        shoppingListContainingTheElement.getElements().stream()
-                .filter(element -> element.getElementId().equals(elementId))
-                .forEach(element -> element.setDone(done));
+        final ShoppingListElement element = getShoppingListElementById(elementId, shoppingListContainingTheElement);
+        element.setDone(done);
         final boolean allListElementsDone = shoppingListContainingTheElement.getElements().stream()
-                .filter(element -> !element.getDone())
+                .filter(ele -> !ele.getDone())
                 .findAny().isEmpty();
         shoppingListContainingTheElement.setDone(allListElementsDone);
-        return shoppingListContainingTheElement;
+        return element;
+    }
+
+    private ShoppingListElement getShoppingListElementById(final Long elementId, final ShoppingList shoppingList) {
+        return shoppingList.getElements().stream()
+                .filter(e -> e.getElementId().equals(elementId))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("Elemenent foes not exist!"));
     }
 
     private boolean doesShoppingListContainElement(final ShoppingList list, final Long elementId) {

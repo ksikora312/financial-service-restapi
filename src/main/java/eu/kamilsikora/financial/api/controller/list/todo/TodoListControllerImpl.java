@@ -1,11 +1,11 @@
 package eu.kamilsikora.financial.api.controller.list.todo;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.list.ResponseListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollection;
-import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
 import eu.kamilsikora.financial.api.service.list.todo.TodoListService;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class TodoListControllerImpl implements TodoListController {
     }
 
     @Override
-    public ResponseTodoListCollectionOverview getListsOverview(UserPrincipal userPrincipal) {
+    public ResponseListCollectionOverview getListsOverview(UserPrincipal userPrincipal) {
         return todoListService.getListsOverview(userPrincipal);
     }
 

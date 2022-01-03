@@ -1,5 +1,6 @@
 package eu.kamilsikora.financial.api.mapper;
 
+import eu.kamilsikora.financial.api.dto.list.ResponseListOverview;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
@@ -10,14 +11,13 @@ import eu.kamilsikora.financial.api.dto.list.todo.NewToDoListElement;
 import eu.kamilsikora.financial.api.dto.list.todo.NewTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoList;
 import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListElement;
-import eu.kamilsikora.financial.api.dto.list.todo.ResponseTodoListOverview;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingListElement;
+import eu.kamilsikora.financial.api.entity.list.todo.Priority;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoList;
 import eu.kamilsikora.financial.api.entity.list.todo.TodoListElement;
-import eu.kamilsikora.financial.api.entity.list.todo.Priority;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -94,7 +94,11 @@ public abstract class ListMapper {
     public abstract void mapIntoEntity(@MappingTarget ShoppingList shoppingList, UpdateShoppingListDto update, Category category);
 
     @Mapping(target = "listId", source = "todoList.listId")
-    public abstract ResponseTodoListOverview mapToOverview(TodoList todoList);
+    public abstract ResponseListOverview mapToOverview(TodoList todoList);
 
-    public abstract List<ResponseTodoListOverview> mapToOverview(List<TodoList> todoLists);
+    public abstract List<ResponseListOverview> mapToOverview(List<TodoList> todoLists);
+    @Mapping(target = "listId", source = "list.listId")
+    public abstract ResponseListOverview mapToOverview(ShoppingList list);
+
+    public abstract List<ResponseListOverview> mapShoppingListsToOverview(List<ShoppingList> shoppingLists);
 }

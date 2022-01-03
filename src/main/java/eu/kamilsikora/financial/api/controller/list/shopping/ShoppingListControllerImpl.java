@@ -1,10 +1,12 @@
 package eu.kamilsikora.financial.api.controller.list.shopping;
 
 import eu.kamilsikora.financial.api.configuration.auth.UserPrincipal;
+import eu.kamilsikora.financial.api.dto.list.ResponseListCollectionOverview;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.service.list.shopping.ShoppingListService;
@@ -63,13 +65,28 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     }
 
     @Override
-    public ResponseShoppingListDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
+    public ResponseShoppingListElementDto markElementAs(final UserPrincipal userPrincipal, final Long elementId, final Boolean done) {
         return shoppingListService.markElementAs(userPrincipal, elementId, done);
     }
 
     @Override
     public ResponseShoppingListDto markAsPrimary(final UserPrincipal userPrincipal, final Long listId) {
         return shoppingListService.markAsPrimary(userPrincipal, listId);
+    }
+
+    @Override
+    public ResponseListCollectionOverview getListsOverview(UserPrincipal userPrincipal) {
+        return shoppingListService.getOverviews(userPrincipal);
+    }
+
+    @Override
+    public void deleteList(UserPrincipal userPrincipal, Long listId) {
+        shoppingListService.deleteList(userPrincipal, listId);
+    }
+
+    @Override
+    public ResponseShoppingListDto deleteListElement(UserPrincipal userPrincipal, Long elementId) {
+        return shoppingListService.deleteListElement(userPrincipal, elementId);
     }
 }
 
