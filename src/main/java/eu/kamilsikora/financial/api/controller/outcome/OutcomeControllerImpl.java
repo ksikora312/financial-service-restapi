@@ -77,4 +77,9 @@ public class OutcomeControllerImpl implements OutcomeController {
         final FilteringParametersDto parameters = FilteringParametersDtoBuilder.build(user, startDate, endDate, type, category);
         return singleOutcomeService.provideSummary(user, parameters);
     }
+
+    @Override
+    public Page<OutcomeOverviewDto> getOutcomesProducedByContinuityOutcome(UserPrincipal userPrincipal, Long continuityOutcomeId, Integer pageNumber, Integer pageSize) {
+        return singleOutcomeService.outcomesByContinuityOutcome(userPrincipal, continuityOutcomeId, pageNumber, pageSize);
+    }
 }

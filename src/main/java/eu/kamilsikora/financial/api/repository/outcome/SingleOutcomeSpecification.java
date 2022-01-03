@@ -2,6 +2,8 @@ package eu.kamilsikora.financial.api.repository.outcome;
 
 import eu.kamilsikora.financial.api.dto.FilteringParametersDto;
 import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
+import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
+import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import lombok.AllArgsConstructor;
@@ -23,6 +25,18 @@ public class SingleOutcomeSpecification<T extends SingleOutcome> {
             spec = spec.and(type());
         }
         return spec;
+    }
+
+    public static Specification<ContinuitySingleOutcome> outcomesByContinuityOutcome(ContinuityOutcome continuityOutcome) {
+        return expensesByContinuityOutcome(continuityOutcome).and(source((continuityOutcome)));
+    }
+
+    private static Specification<ContinuitySingleOutcome> expensesByContinuityOutcome(ContinuityOutcome continuityOutcome) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("expenses"), continuityOutcome.getUser().getExpenses()));
+    }
+
+    private static Specification<ContinuitySingleOutcome> source(ContinuityOutcome continuityOutcome) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("source"), continuityOutcome));
     }
 
     private Specification<T> expenses() {

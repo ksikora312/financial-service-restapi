@@ -10,9 +10,14 @@ import eu.kamilsikora.financial.api.dto.outcome.OutcomeSummaryDto;
 import eu.kamilsikora.financial.api.dto.outcome.OverviewType;
 import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
+import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
+import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.RegularSingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
+import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
+import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
+import eu.kamilsikora.financial.api.repository.outcome.ContinuitySingleOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.RegularSingleOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.SingleOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.SingleOutcomeSpecification;
@@ -35,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,6 +49,8 @@ import java.util.stream.Collectors;
 public class SingleOutcomeService implements OverviewProvider {
     private final RegularSingleOutcomeRepository regularSingleOutcomeRepository;
     private final SingleOutcomeRepository singleOutcomeRepository;
+    private final ContinuitySingleOutcomeRepository continuitySingleOutcomeRepository;
+    private final ContinuityOutcomeRepository continuityOutcomeRepository;
     private final UserHelperService userHelperService;
     private final CategoryService categoryService;
     private final OutcomeMapper outcomeMapper;
@@ -82,7 +90,7 @@ public class SingleOutcomeService implements OverviewProvider {
                 new SingleOutcomeSpecification<>(parameters).buildOnParameters();
         final List<SingleOutcome> outcomes = singleOutcomeRepository.findAll(specification, Sort.by("date").ascending());
         final Map<Category, List<SingleOutcome>> categoryToOutcomes = getAsCategoryToOutcomes(outcomes);
-        final List<LocalDate> dates = getCorrectStreamOfDates(parameters.getStartDate(), parameters.getEndDate());
+        final List<LocalDate> dates = getCorrectListOfDates(parameters.getStartDate(), parameters.getEndDate());
 
         final List<CategorySummaryDto> categorySummaries = new ArrayList<>();
         categoryToOutcomes.keySet()
@@ -92,7 +100,22 @@ public class SingleOutcomeService implements OverviewProvider {
         return new OutcomeSummaryDto(dates, categorySummaries);
     }
 
-    private List<LocalDate> getCorrectStreamOfDates(final LocalDate start, final LocalDate end) {
+    @Transactional(readOnly = true)
+    public Page<OutcomeOverviewDto> outcomesByContinuityOutcome(final UserPrincipal userPrincipal,
+                                                                final Long continuityOutcomeId,
+                                                                final Integer pageNumber,
+                                                                final Integer pageSize) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ContinuityOutcome continuityOutcome = continuityOutcomeRepository
+                .findByUserAndId(user, continuityOutcomeId).orElseThrow(() ->
+                        new ObjectDoesNotExistException("Continuity outcome does not exist!"));
+        final Specification<ContinuitySingleOutcome> spec = SingleOutcomeSpecification.outcomesByContinuityOutcome(continuityOutcome);
+        final Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by("date").descending());
+        Page<ContinuitySingleOutcome> page = continuitySingleOutcomeRepository.findAll(spec, pageable);
+        return page.map(outcomeMapper::mapToOverviewDto);
+    }
+
+    private List<LocalDate> getCorrectListOfDates(final LocalDate start, final LocalDate end) {
         int daysToCheck = 1;
         List<LocalDate> dates;
         do {

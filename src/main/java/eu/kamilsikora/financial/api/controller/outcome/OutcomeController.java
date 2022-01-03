@@ -64,4 +64,10 @@ public interface OutcomeController {
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate startDate,
                                          @RequestParam(required = false) @DateTimeFormat(pattern = "dd-MM-yyyy") LocalDate endDate,
                                          @RequestParam(required = false) Long category);
+
+    @GetMapping("/continuity/outcomes/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    Page<OutcomeOverviewDto> getOutcomesProducedByContinuityOutcome(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable("id") Long continuityOutcomeId,
+                                                                    @RequestParam(required = true) Integer pageNumber,
+                                                                    @RequestParam(required = true) Integer pageSize);
 }
