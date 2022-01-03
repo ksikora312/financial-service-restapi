@@ -8,7 +8,7 @@ import lombok.Setter;
 public class UpdateContinuityOutcomeDto {
     private Long id;
     private Double value;
-    private String description;
     private Long categoryId;
     private Integer timeIntervalInDays;
+    private String name;
 }

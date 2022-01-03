@@ -28,6 +28,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.temporal.ChronoUnit;
+
 @Service
 @RequiredArgsConstructor
 public class ContinuityOutcomeService implements OverviewProvider {
@@ -57,7 +59,13 @@ public class ContinuityOutcomeService implements OverviewProvider {
         final ContinuityOutcome continuityOutcome = continuityOutcomeRepository.findByUserAndId(user, updateContinuityOutcomeDto.getId())
                 .orElseThrow(() -> new ObjectDoesNotExistException("Continuity outcome does not exist!"));
         final Category category = categoryService.resolveAndIncrementUsage(user, updateContinuityOutcomeDto.getCategoryId());
-        outcomeMapper.mapIntoContinuityOutcome(continuityOutcome, updateContinuityOutcomeDto, category);
+
+        continuityOutcome.setNextUsage(continuityOutcome.getLastUsage().plus(updateContinuityOutcomeDto.getTimeIntervalInDays(), ChronoUnit.DAYS));
+        continuityOutcome.setName(updateContinuityOutcomeDto.getName());
+        continuityOutcome.setCategory(category);
+        continuityOutcome.setTimeIntervalInDays(updateContinuityOutcomeDto.getTimeIntervalInDays());
+        continuityOutcome.setValue(updateContinuityOutcomeDto.getValue());
+
         validator.validate(continuityOutcome);
         continuityOutcomeRepository.save(continuityOutcome);
     }

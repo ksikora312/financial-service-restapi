@@ -81,11 +81,12 @@ public abstract class OutcomeMapper {
     @Mapping(target = "name", source = "updateOutcomeDto.name")
     public abstract void mapIntoSingleOutcome(@MappingTarget SingleOutcome singleOutcome, UpdateOutcomeDto updateOutcomeDto, Category category);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE, ignoreByDefault = true)
     @Mapping(target = "continuityOutcome.id", ignore = true)
     @Mapping(target = "continuityOutcome.category", source = "category")
     @Mapping(target = "continuityOutcome.user", ignore = true)
     @Mapping(target = "continuityOutcome.nextUsage", expression = "java(continuityOutcome.getLastUsage().plus(continuityOutcome.getTimeIntervalInDays(), ChronoUnit.DAYS))")
+    @Mapping(target = "continuityOutcome.name", source = "update.name")
     public abstract void mapIntoContinuityOutcome(@MappingTarget ContinuityOutcome continuityOutcome, UpdateContinuityOutcomeDto update, Category category);
 
     @Mapping(target = "type", expression = "java(OutcomeType.CONTINUOUS_OUTCOME.name().replace('_', ' '))")
@@ -107,5 +108,6 @@ public abstract class OutcomeMapper {
     @Mapping(target = "addedDate", dateFormat = "dd.MM.yyyy HH:mm")
     @Mapping(target = "lastUsage", dateFormat = "dd.MM.yyyy HH:mm")
     @Mapping(target = "nextUsage", dateFormat = "dd.MM.yyyy HH:mm")
+    @Mapping(target = "category", expression = "java(continuityOutcome.getCategory().getName())")
     public abstract ContinuityOutcomeDetailsDto mapToDetailsDto(ContinuityOutcome continuityOutcome);
 }
