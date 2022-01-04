@@ -8,5 +8,4 @@ import lombok.Setter;
 public class UpdateShoppingListElementDto {
     private Long elementId;
     private Double value;
-    private Long categoryId;
 }

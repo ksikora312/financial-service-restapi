@@ -11,7 +11,6 @@ import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElemen
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.entity.User;
-import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingListElement;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
@@ -19,7 +18,6 @@ import eu.kamilsikora.financial.api.mapper.ListMapper;
 import eu.kamilsikora.financial.api.repository.list.shopping.ShoppingListElementRepository;
 import eu.kamilsikora.financial.api.repository.list.shopping.ShoppingListRepository;
 import eu.kamilsikora.financial.api.service.UserHelperService;
-import eu.kamilsikora.financial.api.service.outcome.CategoryService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,15 +35,13 @@ public class ShoppingListService {
     private final ShoppingListElementRepository shoppingListElementRepository;
     private final ShoppingListRepository shoppingListRepository;
     private final UserHelperService userHelperService;
-    private final CategoryService categoryService;
     private final ExceptionThrowingValidator validator;
     private final ListMapper listMapper;
 
     @Transactional
     public ResponseShoppingListDto createNewList(final UserPrincipal userPrincipal, final NewShoppingListDto newList) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final Category category = categoryService.resolveAndIncrementUsage(user, newList.getCategoryId());
-        ShoppingList shoppingList = listMapper.mapToEntity(newList, user, category);
+        ShoppingList shoppingList = listMapper.mapToEntity(newList, user);
         validator.validate(shoppingList);
         user.addNewShoppingList(shoppingList);
         shoppingListRepository.save(shoppingList);
@@ -58,8 +54,7 @@ public class ShoppingListService {
         final Long listId = newShoppingListElement.getListId();
         final ShoppingList shoppingList = findListById(user.getShoppingLists(), listId)
                 .orElseThrow(() -> new ObjectDoesNotExistException("Shopping list does not exist!"));
-        final Category category = categoryService.resolveAndIncrementUsage(user, newShoppingListElement.getCategoryId());
-        final ShoppingListElement element = listMapper.mapToEntity(newShoppingListElement, shoppingList, category);
+        final ShoppingListElement element = listMapper.mapToEntity(newShoppingListElement, shoppingList);
         validator.validate(newShoppingListElement, element);
         shoppingList.addElement(element);
         shoppingListElementRepository.save(element);
@@ -113,8 +108,7 @@ public class ShoppingListService {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final ShoppingList shoppingList = findListById(user.getShoppingLists(), update.getId())
                 .orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
-        final Category category = categoryService.resolveAndIncrementUsage(user, update.getCategoryId());
-        listMapper.mapIntoEntity(shoppingList, update, category);
+        listMapper.mapIntoEntity(shoppingList, update);
         validator.validate(shoppingList);
         shoppingListRepository.save(shoppingList);
         return listMapper.mapToDto(shoppingList);
@@ -139,8 +133,7 @@ public class ShoppingListService {
                 .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
         final ShoppingListElement shoppingListElement = findElementInAllLists(user.getShoppingLists(), updateElement.getElementId())
                 .orElseThrow(() -> new ObjectDoesNotExistException("Element does not belong to any of user's lists!"));
-        final Category category = categoryService.resolveAndIncrementUsage(user, updateElement.getCategoryId());
-        listMapper.mapIntoEntity(shoppingListElement, updateElement, category);
+        listMapper.mapIntoEntity(shoppingListElement, updateElement);
         validator.validate(shoppingListElement);
         shoppingListElementRepository.save(shoppingListElement);
         return listMapper.mapToDto(listContainingTheElement);

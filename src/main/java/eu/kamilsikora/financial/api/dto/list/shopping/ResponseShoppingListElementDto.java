@@ -8,7 +8,6 @@ import lombok.Setter;
 public class ResponseShoppingListElementDto {
     private Long elementId;
     private String name;
-    private String category;
     private Double value;
     private Boolean done;
 }

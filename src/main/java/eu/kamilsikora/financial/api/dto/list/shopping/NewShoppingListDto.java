@@ -8,5 +8,4 @@ import lombok.Setter;
 public class NewShoppingListDto {
     private String name;
     private Boolean isPrimary;
-    private Long categoryId;
 }

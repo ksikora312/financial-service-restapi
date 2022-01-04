@@ -7,6 +7,5 @@ import lombok.Setter;
 @Setter
 public class UpdateShoppingListDto {
     private Long id;
-    private Long categoryId;
     private Double value;
 }

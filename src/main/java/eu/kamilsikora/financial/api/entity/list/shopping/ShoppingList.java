@@ -1,7 +1,6 @@
 package eu.kamilsikora.financial.api.entity.list.shopping;
 
 import eu.kamilsikora.financial.api.entity.User;
-import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ShoppingListSingleOutcome;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,9 +34,6 @@ public class ShoppingList {
     private List<ShoppingListElement> elements;
     private Boolean isPrimary;
     private Boolean done;
-    @OneToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
     @OneToOne(mappedBy = "source")
     private ShoppingListSingleOutcome outcome;
     private LocalDateTime createdDate;

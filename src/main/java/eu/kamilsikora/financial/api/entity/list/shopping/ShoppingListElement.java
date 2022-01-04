@@ -1,6 +1,5 @@
 package eu.kamilsikora.financial.api.entity.list.shopping;
 
-import eu.kamilsikora.financial.api.entity.expenses.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import java.time.LocalDateTime;
 
@@ -28,9 +26,6 @@ public class ShoppingListElement {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shopping_list_elem_seq")
     private Long elementId;
     private String name;
-    @OneToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
     private Double value;
     private LocalDateTime addedDate;
     private Boolean done;
