@@ -32,8 +32,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -97,7 +100,11 @@ public class SingleOutcomeService implements OverviewProvider {
                 .forEach(category ->
                     categorySummaries.add(aggregateValuesByDates(category, categoryToOutcomes.get(category), dates)));
 
-        return new OutcomeSummaryDto(dates, categorySummaries);
+        final String datePattern = "dd.MM.yyyy";
+        return new OutcomeSummaryDto(
+                parameters.getStartDate().format(DateTimeFormatter.ofPattern(datePattern)),
+                parameters.getEndDate().format(DateTimeFormatter.ofPattern(datePattern)),
+                dates, categorySummaries);
     }
 
     @Transactional(readOnly = true)

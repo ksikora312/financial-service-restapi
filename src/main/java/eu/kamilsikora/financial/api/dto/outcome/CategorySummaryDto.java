@@ -10,6 +10,7 @@ import java.util.List;
 public class CategorySummaryDto {
     private String category;
     private Double moneySpent;
+    private Integer outcomesSum;
     private List<Double> values;
     private List<Integer> outcomes;
 
@@ -18,6 +19,7 @@ public class CategorySummaryDto {
         this.values = values;
         this.outcomes = outcomes;
         this.moneySpent = values.stream().mapToDouble(Double::valueOf).sum();
+        this.outcomesSum = outcomes.stream().mapToInt(Integer::valueOf).sum();
     }
 
 }
