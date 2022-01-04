@@ -13,7 +13,6 @@ import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.Expenses;
 import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
-import eu.kamilsikora.financial.api.entity.expenses.RegularSingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
@@ -32,9 +31,9 @@ import java.util.List;
 public abstract class OutcomeMapper {
 
     @AfterMapping
-    protected void handleDate(@MappingTarget RegularSingleOutcome regularSingleOutcome) {
-        if (regularSingleOutcome.getDate() == null) {
-            regularSingleOutcome.setDate(LocalDate.now());
+    protected void handleDate(@MappingTarget SingleOutcome singleOutcome) {
+        if (singleOutcome.getDate() == null) {
+            singleOutcome.setDate(LocalDate.now());
         }
     }
 
@@ -56,7 +55,7 @@ public abstract class OutcomeMapper {
     @Mapping(source = "category", target = "category")
     @Mapping(target = "name", source = "newOutcomeDto.name")
     @Mapping(target = "id", ignore = true)
-    public abstract RegularSingleOutcome mapToEntity(NewOutcomeDto newOutcomeDto, User user, Category category);
+    public abstract SingleOutcome mapToEntity(NewOutcomeDto newOutcomeDto, User user, Category category);
 
     @Mapping(target = "outcomeType", expression = "java(singleOutcome.getOutcomeType().toString())")
     @Mapping(target = "date", dateFormat = "dd.MM.yyyy")
@@ -103,6 +102,7 @@ public abstract class OutcomeMapper {
     @Mapping(target = "date", dateFormat = "dd.MM.yyyy")
     @Mapping(target = "category", expression = "java(continuitySingleOutcome.getCategory().getName())")
     public abstract OutcomeDetailsDto mapToDto(ContinuitySingleOutcome continuitySingleOutcome);
+
     public abstract List<OutcomeDetailsDto> mapToDto(List<ContinuitySingleOutcome> continuitySingleOutcomes);
 
     @Mapping(target = "addedDate", dateFormat = "dd.MM.yyyy HH:mm")

@@ -12,13 +12,11 @@ import eu.kamilsikora.financial.api.entity.User;
 import eu.kamilsikora.financial.api.entity.expenses.Category;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuityOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.ContinuitySingleOutcome;
-import eu.kamilsikora.financial.api.entity.expenses.RegularSingleOutcome;
 import eu.kamilsikora.financial.api.entity.expenses.SingleOutcome;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.OutcomeMapper;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuityOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.ContinuitySingleOutcomeRepository;
-import eu.kamilsikora.financial.api.repository.outcome.RegularSingleOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.SingleOutcomeRepository;
 import eu.kamilsikora.financial.api.repository.outcome.SingleOutcomeSpecification;
 import eu.kamilsikora.financial.api.service.UserHelperService;
@@ -32,25 +30,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class SingleOutcomeService implements OverviewProvider {
-    private final RegularSingleOutcomeRepository regularSingleOutcomeRepository;
     private final SingleOutcomeRepository singleOutcomeRepository;
     private final ContinuitySingleOutcomeRepository continuitySingleOutcomeRepository;
     private final ContinuityOutcomeRepository continuityOutcomeRepository;
@@ -65,9 +59,9 @@ public class SingleOutcomeService implements OverviewProvider {
     public void addNewOutcome(final UserPrincipal userPrincipal, final NewOutcomeDto newOutcomeDto) {
         final User user = userHelperService.getActiveUser(userPrincipal);
         final Category category = categoryService.resolveAndIncrementUsage(user, newOutcomeDto.getCategoryId());
-        final RegularSingleOutcome outcome = outcomeMapper.mapToEntity(newOutcomeDto, user, category);
+        final SingleOutcome outcome = outcomeMapper.mapToEntity(newOutcomeDto, user, category);
         validator.validate(outcome, newOutcomeDto);
-        regularSingleOutcomeRepository.save(outcome);
+        singleOutcomeRepository.save(outcome);
     }
 
     @Override
@@ -98,7 +92,7 @@ public class SingleOutcomeService implements OverviewProvider {
         final List<CategorySummaryDto> categorySummaries = new ArrayList<>();
         categoryToOutcomes.keySet()
                 .forEach(category ->
-                    categorySummaries.add(aggregateValuesByDates(category, categoryToOutcomes.get(category), dates)));
+                        categorySummaries.add(aggregateValuesByDates(category, categoryToOutcomes.get(category), dates)));
 
         final String datePattern = "dd.MM.yyyy";
         return new OutcomeSummaryDto(
@@ -129,7 +123,7 @@ public class SingleOutcomeService implements OverviewProvider {
             dates = end.datesUntil(start, Period.ofDays(-daysToCheck)).collect(Collectors.toList());
             Collections.reverse(dates);
             daysToCheck++;
-        } while(dates.size() > MAX_DATES);
+        } while (dates.size() > MAX_DATES);
         return dates;
     }
 
@@ -152,9 +146,9 @@ public class SingleOutcomeService implements OverviewProvider {
     private CategorySummaryDto aggregateValuesByDates(final Category category, final List<SingleOutcome> outcomes, final List<LocalDate> dates) {
         final List<Double> values = new ArrayList<>();
         final List<Integer> numberOfOrders = new ArrayList<>();
-        for(final LocalDate date: dates) {
+        for (final LocalDate date : dates) {
             final List<SingleOutcome> outcomesToBeAggregatedByThisDate = outcomes.stream()
-                    .filter(out -> out.getDate().isBefore(date))
+                    .filter(out -> out.getDate().isBefore(date) || out.getDate().isEqual(date))
                     .collect(Collectors.toList());
             values.add(aggregateValue(outcomesToBeAggregatedByThisDate));
             numberOfOrders.add(outcomesToBeAggregatedByThisDate.size());

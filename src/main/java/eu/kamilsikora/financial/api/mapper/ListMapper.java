@@ -39,7 +39,7 @@ public abstract class ListMapper {
 
     @AfterMapping
     protected void fillRestOfData(@MappingTarget TodoList todoList) {
-        if(todoList.getIsPrimary() == null) {
+        if (todoList.getIsPrimary() == null) {
             todoList.setIsPrimary(false);
         }
     }
@@ -84,7 +84,8 @@ public abstract class ListMapper {
     @Mapping(target = "elementId", ignore = true)
     @Mapping(target = "name", ignore = true)
     public abstract void mapIntoEntity(@MappingTarget ShoppingListElement shoppingListElement,
-                                                      UpdateShoppingListElementDto update, Category category);
+                                       UpdateShoppingListElementDto update, Category category);
+
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "listId", ignore = true)
     @Mapping(target = "name", ignore = true)
@@ -97,6 +98,7 @@ public abstract class ListMapper {
     public abstract ResponseListOverview mapToOverview(TodoList todoList);
 
     public abstract List<ResponseListOverview> mapToOverview(List<TodoList> todoLists);
+
     @Mapping(target = "listId", source = "list.listId")
     public abstract ResponseListOverview mapToOverview(ShoppingList list);
 

@@ -14,13 +14,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "SingleOutcome")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class SingleOutcome {
+public class SingleOutcome {
 
     @Id
     @SequenceGenerator(
