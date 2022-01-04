@@ -18,7 +18,8 @@ public class CategorySummaryDto {
         this.category = category;
         this.values = values;
         this.outcomes = outcomes;
-        this.moneySpent = values.stream().mapToDouble(Double::valueOf).sum();
+        final String trimmedSumString = String.format("%.2f", values.stream().mapToDouble(Double::valueOf).sum()).replace(',', '.');
+        this.moneySpent = Double.parseDouble(trimmedSumString);
         this.outcomesSum = outcomes.stream().mapToInt(Integer::valueOf).sum();
     }
 

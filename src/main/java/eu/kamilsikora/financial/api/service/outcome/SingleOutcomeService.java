@@ -164,8 +164,10 @@ public class SingleOutcomeService implements OverviewProvider {
     }
 
     private Double aggregateValue(final List<SingleOutcome> outcomes) {
-        return outcomes.stream()
+        final Double sum = outcomes.stream()
                 .mapToDouble(SingleOutcome::getValue)
                 .sum();
+        final String trimmedSumString = String.format("%.2f", sum).replace(',', '.');
+        return Double.parseDouble(trimmedSumString);
     }
 }
