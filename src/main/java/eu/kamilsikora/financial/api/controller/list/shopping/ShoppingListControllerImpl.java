@@ -7,6 +7,7 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ShoppingListToOutcomeDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.service.list.shopping.ShoppingListService;
@@ -87,6 +88,11 @@ public class ShoppingListControllerImpl implements ShoppingListController {
     @Override
     public ResponseShoppingListDto deleteListElement(UserPrincipal userPrincipal, Long elementId) {
         return shoppingListService.deleteListElement(userPrincipal, elementId);
+    }
+
+    @Override
+    public void listToOutcome(UserPrincipal userPrincipal, ShoppingListToOutcomeDto content) {
+        shoppingListService.listToOutcome(userPrincipal, content);
     }
 }
 

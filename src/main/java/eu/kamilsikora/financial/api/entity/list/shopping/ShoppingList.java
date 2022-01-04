@@ -39,6 +39,8 @@ public class ShoppingList {
     private LocalDateTime createdDate;
     private Double value;
 
+    private Boolean active;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

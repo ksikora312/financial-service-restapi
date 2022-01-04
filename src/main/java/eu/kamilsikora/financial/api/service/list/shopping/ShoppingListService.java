@@ -8,21 +8,29 @@ import eu.kamilsikora.financial.api.dto.list.shopping.NewShoppingListElementDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListCollectionDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.ResponseShoppingListElementDto;
+import eu.kamilsikora.financial.api.dto.list.shopping.ShoppingListToOutcomeDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListDto;
 import eu.kamilsikora.financial.api.dto.list.shopping.UpdateShoppingListElementDto;
 import eu.kamilsikora.financial.api.entity.User;
+import eu.kamilsikora.financial.api.entity.expenses.Category;
+import eu.kamilsikora.financial.api.entity.expenses.OutcomeType;
+import eu.kamilsikora.financial.api.entity.expenses.ShoppingListSingleOutcome;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingList;
 import eu.kamilsikora.financial.api.entity.list.shopping.ShoppingListElement;
 import eu.kamilsikora.financial.api.errorhandling.ObjectDoesNotExistException;
 import eu.kamilsikora.financial.api.mapper.ListMapper;
 import eu.kamilsikora.financial.api.repository.list.shopping.ShoppingListElementRepository;
 import eu.kamilsikora.financial.api.repository.list.shopping.ShoppingListRepository;
+import eu.kamilsikora.financial.api.repository.outcome.ShoppingListSingleOutcomeRepository;
 import eu.kamilsikora.financial.api.service.UserHelperService;
+import eu.kamilsikora.financial.api.service.outcome.CategoryService;
 import eu.kamilsikora.financial.api.validation.ExceptionThrowingValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +45,8 @@ public class ShoppingListService {
     private final UserHelperService userHelperService;
     private final ExceptionThrowingValidator validator;
     private final ListMapper listMapper;
+    private final CategoryService categoryService;
+    private final ShoppingListSingleOutcomeRepository shoppingListSingleOutcomeRepository;
 
     @Transactional
     public ResponseShoppingListDto createNewList(final UserPrincipal userPrincipal, final NewShoppingListDto newList) {
@@ -155,7 +165,8 @@ public class ShoppingListService {
     @Transactional
     public ResponseListCollectionOverview getOverviews(final UserPrincipal userPrincipal) {
         final User user = userHelperService.getActiveUser(userPrincipal);
-        final List<ShoppingList> shoppingLists = user.getShoppingLists();
+        final List<ShoppingList> shoppingLists = user.getShoppingLists()
+                .stream().filter(ShoppingList::getActive).collect(Collectors.toList());
 
         final List<ResponseListOverview> overviews = listMapper.mapShoppingListsToOverview(shoppingLists);
         return new ResponseListCollectionOverview(overviews);
@@ -184,6 +195,34 @@ public class ShoppingListService {
         shoppingListElementRepository.delete(shoppingElement);
         return listMapper.mapToDto(shoppingList);
     }
+
+    @Transactional
+    public void listToOutcome(final UserPrincipal userPrincipal, final ShoppingListToOutcomeDto content) {
+        final User user = userHelperService.getActiveUser(userPrincipal);
+        final ShoppingList shoppingList = user.getShoppingLists().stream()
+                .filter(list -> list.getListId().equals(content.getListId()))
+                .findFirst().orElseThrow(() -> new ObjectDoesNotExistException("List does not exist!"));
+        final Category category = categoryService.resolveAndIncrementUsage(user, content.getCategoryId());
+        final ShoppingListSingleOutcome outcome = mapToOutcome(user, content, shoppingList, category);
+        shoppingList.setActive(false);
+        shoppingListSingleOutcomeRepository.save(outcome);
+    }
+
+    private ShoppingListSingleOutcome mapToOutcome(final User user, final ShoppingListToOutcomeDto content,
+                                                   final ShoppingList shoppingList, final Category category) {
+        ShoppingListSingleOutcome outcome = new ShoppingListSingleOutcome();
+
+        outcome.setName(content.getName());
+        outcome.setOutcomeType(OutcomeType.SHOPPING_LIST_OUTCOME);
+        outcome.setSource(shoppingList);
+        outcome.setCategory(category);
+        outcome.setDate(LocalDateTime.ofInstant(content.getDate().toInstant(), ZoneOffset.UTC).toLocalDate());
+        outcome.setValue(content.getValue());
+        outcome.setExpenses(user.getExpenses());
+
+        return outcome;
+    }
+
 
     private Optional<ShoppingListElement> findElementInAllLists(final List<ShoppingList> shoppingLists, final long elementId) {
         return findListContainingElement(shoppingLists, elementId)

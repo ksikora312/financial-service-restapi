@@ -67,6 +67,7 @@ public abstract class ListMapper {
     @Mapping(target = "done", expression = "java(false)")
     @Mapping(target = "createdDate", expression = "java(LocalDateTime.now())")
     @Mapping(target = "isPrimary", expression = "java(newShoppingList.getIsPrimary() == null? false: newShoppingList.getIsPrimary())")
+    @Mapping(target = "active", expression = "java(true)")
     public abstract ShoppingList mapToEntity(NewShoppingListDto newShoppingList, User user);
 
     public abstract ResponseShoppingListElementDto mapToDto(ShoppingListElement shoppingListElement);
