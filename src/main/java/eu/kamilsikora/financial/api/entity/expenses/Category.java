@@ -27,7 +27,7 @@ public class Category {
     private String name;
     private Integer usages;
     @ManyToOne
-    @JoinColumn(name = "expenses_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public void incrementUsages() {
